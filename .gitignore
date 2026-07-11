@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments and secrets
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors and operating systems
+.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary research/work files
+work/
+scratch/
+
+# Generated local data
+study_config.json
