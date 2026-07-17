@@ -1,0 +1,10 @@
+pyproject.toml
+src/study_app/__init__.py
+src/study_app/schemas.py
+src/study_app/service.py
+src/study_app.egg-info/PKG-INFO
+src/study_app.egg-info/SOURCES.txt
+src/study_app.egg-info/dependency_links.txt
+src/study_app.egg-info/requires.txt
+src/study_app.egg-info/top_level.txt
+tests/test_service.py
