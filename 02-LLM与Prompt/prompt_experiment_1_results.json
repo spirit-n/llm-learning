@@ -1,0 +1,170 @@
+{
+  "summary": [
+    {
+      "variant": "A",
+      "samples": 3,
+      "api_success_rate": 1.0,
+      "format_pass_rate": 0.0,
+      "accuracy": 0.0,
+      "avg_latency_seconds": 2.26,
+      "prompt_tokens": 64,
+      "completion_tokens": 384
+    },
+    {
+      "variant": "B",
+      "samples": 3,
+      "api_success_rate": 1.0,
+      "format_pass_rate": 0.0,
+      "accuracy": 0.0,
+      "avg_latency_seconds": 0.568,
+      "prompt_tokens": 487,
+      "completion_tokens": 69
+    }
+  ],
+  "records": [
+    {
+      "id": "p01",
+      "input": "什么是 RAG？",
+      "expected": "knowledge",
+      "tags": [
+        "正常"
+      ],
+      "variant": "A",
+      "api_ok": true,
+      "format_ok": false,
+      "predicted": null,
+      "correct": false,
+      "raw": "好的，我们来全面地分析一下“什么是 RAG？”这个问题。\n\n这是一个在人工智能领域，特别是大语言模型应用中，非常核心且重要的问题。我会从定义、核心思想、工作流程、优势、挑战和应用场景等多个维度进行深入剖析。\n\n---\n\n### **一、核心定义：RAG 是什么？**\n\n**RAG** 的全称是 **Retrieval-Augmented Generation**，中文翻译为 **“检索增强生成”**。\n\n简单来说，RAG 是一种将**信息检索**与**内容生成**相结合的人工智能技术。它旨在解决传统大型语言模型（如 GPT",
+      "elapsed_seconds": 2.318,
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": {
+          "cached_tokens": 18
+        },
+        "total_tokens": 147
+      },
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='好的，我们来全面...语言模型（如 GPT', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+    },
+    {
+      "id": "p01",
+      "input": "什么是 RAG？",
+      "expected": "knowledge",
+      "tags": [
+        "正常"
+      ],
+      "variant": "B",
+      "api_ok": true,
+      "format_ok": false,
+      "predicted": null,
+      "correct": false,
+      "raw": "```json\n{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问概念定义\"\n}\n```",
+      "elapsed_seconds": 0.51,
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 160,
+        "prompt_tokens_details": {
+          "cached_tokens": 159
+        },
+        "total_tokens": 183
+      },
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='```json\\n{\\n  \"category\"...概念定义\"\\n}\\n```', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+    },
+    {
+      "id": "p02",
+      "input": "Python 的 list 和 set 有什么区别？",
+      "expected": "knowledge",
+      "tags": [
+        "正常"
+      ],
+      "variant": "A",
+      "api_ok": true,
+      "format_ok": false,
+      "predicted": null,
+      "correct": false,
+      "raw": "好的，我们来详细分析一下 Python 中 `list` 和 `set` 的区别。\n\n这是一个非常核心且重要的 Python 问题，理解它们的差异对于编写高效、正确的代码至关重要。\n\n我们可以从多个维度来剖析它们的区别：**数据结构、元素特性、操作性能、使用场景**等。\n\n---\n\n### 核心区别一览表\n\n| 特性 | `list` (列表) | `set` (集合) |\n| :--- | :--- | :--- |\n| **数据结构** | 有序的线性序列 | 无序的哈希表 |\n| **元素顺序** | **有序**，元素",
+      "elapsed_seconds": 2.221,
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 24,
+        "prompt_tokens_details": {
+          "cached_tokens": 10
+        },
+        "total_tokens": 152
+      },
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='好的，我们来详细...* | **有序**，元素', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+    },
+    {
+      "id": "p02",
+      "input": "Python 的 list 和 set 有什么区别？",
+      "expected": "knowledge",
+      "tags": [
+        "正常"
+      ],
+      "variant": "B",
+      "api_ok": true,
+      "format_ok": false,
+      "predicted": null,
+      "correct": false,
+      "raw": "```json\n{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问概念区别\"\n}\n```",
+      "elapsed_seconds": 0.637,
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 165,
+        "prompt_tokens_details": {
+          "cached_tokens": 151
+        },
+        "total_tokens": 188
+      },
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='```json\\n{\\n  \"category\"...概念区别\"\\n}\\n```', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+    },
+    {
+      "id": "p03",
+      "input": "请解释 token 和字符的区别",
+      "expected": "knowledge",
+      "tags": [
+        "正常"
+      ],
+      "variant": "A",
+      "api_ok": true,
+      "format_ok": false,
+      "predicted": null,
+      "correct": false,
+      "raw": "好的，我们来详细分析一下“Token（词元）”和“Character（字符）”的区别。\n\n这是一个在计算机科学、自然语言处理和编程领域都非常基础且重要的概念。简单来说，**字符是文本的最小组成单元，而词元是由字符组成的、有意义的语言单元。**\n\n下面我们从多个维度进行深入剖析。\n\n---\n\n### 一、核心定义与直观理解\n\n#### 1. 字符\n\n*   **定义**：字符是文本中最小的、不可再分的单位。它通常指的是一个字母、一个数字、一个标点符号或一个空格。\n*   **直观理解**",
+      "elapsed_seconds": 2.241,
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 21,
+        "prompt_tokens_details": {
+          "cached_tokens": 10
+        },
+        "total_tokens": 149
+      },
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='好的，我们来详细...\\n*   **直观理解**', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+    },
+    {
+      "id": "p03",
+      "input": "请解释 token 和字符的区别",
+      "expected": "knowledge",
+      "tags": [
+        "正常"
+      ],
+      "variant": "B",
+      "api_ok": true,
+      "format_ok": false,
+      "predicted": null,
+      "correct": false,
+      "raw": "```json\n{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问概念定义\"\n}\n```",
+      "elapsed_seconds": 0.558,
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 162,
+        "prompt_tokens_details": {
+          "cached_tokens": 151
+        },
+        "total_tokens": 185
+      },
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='```json\\n{\\n  \"category\"...概念定义\"\\n}\\n```', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+    }
+  ]
+}

@@ -1,0 +1,3078 @@
+{
+  "summary": [
+    {
+      "variant": "no_priority",
+      "samples": 20,
+      "api_success_rate": 1.0,
+      "format_pass_rate": 1.0,
+      "definition_accuracy": 1.0,
+      "source_accuracy": 1.0,
+      "full_accuracy": 1.0,
+      "grounded_source_rate": 1.0,
+      "old_source_rate": 0.0,
+      "last_document_rate": 0.5,
+      "avg_latency_seconds": 1.057,
+      "avg_prompt_tokens": 469.7,
+      "avg_completion_tokens": 70.9,
+      "total_tokens": 10812
+    },
+    {
+      "variant": "priority_rule",
+      "samples": 20,
+      "api_success_rate": 1.0,
+      "format_pass_rate": 1.0,
+      "definition_accuracy": 1.0,
+      "source_accuracy": 1.0,
+      "full_accuracy": 1.0,
+      "grounded_source_rate": 1.0,
+      "old_source_rate": 0.0,
+      "last_document_rate": 0.5,
+      "avg_latency_seconds": 1.119,
+      "avg_prompt_tokens": 513.7,
+      "avg_completion_tokens": 72.4,
+      "total_tokens": 11722
+    },
+    {
+      "variant": "latest_only",
+      "samples": 20,
+      "api_success_rate": 1.0,
+      "format_pass_rate": 1.0,
+      "definition_accuracy": 1.0,
+      "source_accuracy": 1.0,
+      "full_accuracy": 1.0,
+      "grounded_source_rate": 1.0,
+      "old_source_rate": 0.0,
+      "last_document_rate": 1.0,
+      "avg_latency_seconds": 1.084,
+      "avg_prompt_tokens": 391.6,
+      "avg_completion_tokens": 70.7,
+      "total_tokens": 9246
+    }
+  ],
+  "order_summary": [
+    {
+      "variant": "no_priority",
+      "document_order": "old_first",
+      "samples": 10,
+      "full_accuracy": 1.0,
+      "selected_last_document_rate": 1.0
+    },
+    {
+      "variant": "no_priority",
+      "document_order": "new_first",
+      "samples": 10,
+      "full_accuracy": 1.0,
+      "selected_last_document_rate": 0.0
+    },
+    {
+      "variant": "priority_rule",
+      "document_order": "old_first",
+      "samples": 10,
+      "full_accuracy": 1.0,
+      "selected_last_document_rate": 1.0
+    },
+    {
+      "variant": "priority_rule",
+      "document_order": "new_first",
+      "samples": 10,
+      "full_accuracy": 1.0,
+      "selected_last_document_rate": 0.0
+    },
+    {
+      "variant": "latest_only",
+      "document_order": "old_first",
+      "samples": 10,
+      "full_accuracy": 1.0,
+      "selected_last_document_rate": 1.0
+    },
+    {
+      "variant": "latest_only",
+      "document_order": "new_first",
+      "samples": 10,
+      "full_accuracy": 1.0,
+      "selected_last_document_rate": 1.0
+    }
+  ],
+  "records": [
+    {
+      "id": "c01_old_first",
+      "question": "请给出公司当前采用的“转化率”指标口径。",
+      "metric_id": "conversion_rate",
+      "tags": [
+        "old_first",
+        "conversion_rate"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_conversion_v1",
+        "metric_conversion_v2"
+      ],
+      "last_source_id": "metric_conversion_v2",
+      "expected": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01",
+        "reason": "当前最新版本"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"conversion_rate\",\"definition_id\":\"conversion_paid_unique\",\"source_id\":\"metric_conversion_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-01-01\",\"reason\":\"当前最新版本\"}",
+      "elapsed_seconds": 1.016,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 466,
+        "prompt_tokens_details": {
+          "cached_tokens": 302
+        },
+        "total_tokens": 534
+      },
+      "request_id": "202607232358323fb2b0c66dd04684",
+      "error": null
+    },
+    {
+      "id": "c01_old_first",
+      "question": "请给出公司当前采用的“转化率”指标口径。",
+      "metric_id": "conversion_rate",
+      "tags": [
+        "old_first",
+        "conversion_rate"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_conversion_v1",
+        "metric_conversion_v2"
+      ],
+      "last_source_id": "metric_conversion_v2",
+      "expected": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"conversion_rate\",\"definition_id\":\"conversion_paid_unique\",\"source_id\":\"metric_conversion_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-01-01\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 1.059,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 510,
+        "prompt_tokens_details": {
+          "cached_tokens": 346
+        },
+        "total_tokens": 582
+      },
+      "request_id": "202607232358337d98dabb31cd4e08",
+      "error": null
+    },
+    {
+      "id": "c01_old_first",
+      "question": "请给出公司当前采用的“转化率”指标口径。",
+      "metric_id": "conversion_rate",
+      "tags": [
+        "old_first",
+        "conversion_rate"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_conversion_v2"
+      ],
+      "last_source_id": "metric_conversion_v2",
+      "expected": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"conversion_rate\",\"definition_id\":\"conversion_paid_unique\",\"source_id\":\"metric_conversion_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-01-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.021,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 390,
+        "prompt_tokens_details": {
+          "cached_tokens": 389
+        },
+        "total_tokens": 458
+      },
+      "request_id": "20260723235835b74600a0f3c54581",
+      "error": null
+    },
+    {
+      "id": "c01_new_first",
+      "question": "请给出公司当前采用的“转化率”指标口径。",
+      "metric_id": "conversion_rate",
+      "tags": [
+        "new_first",
+        "conversion_rate"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_conversion_v2",
+        "metric_conversion_v1"
+      ],
+      "last_source_id": "metric_conversion_v1",
+      "expected": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01",
+        "reason": "当前最新版本"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"conversion_rate\",\"definition_id\":\"conversion_paid_unique\",\"source_id\":\"metric_conversion_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-01-01\",\"reason\":\"当前最新版本\"}",
+      "elapsed_seconds": 1.049,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 466,
+        "prompt_tokens_details": {
+          "cached_tokens": 465
+        },
+        "total_tokens": 534
+      },
+      "request_id": "20260723235836115046c08ae64dc5",
+      "error": null
+    },
+    {
+      "id": "c01_new_first",
+      "question": "请给出公司当前采用的“转化率”指标口径。",
+      "metric_id": "conversion_rate",
+      "tags": [
+        "new_first",
+        "conversion_rate"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_conversion_v2",
+        "metric_conversion_v1"
+      ],
+      "last_source_id": "metric_conversion_v1",
+      "expected": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01",
+        "reason": "最新版本定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"conversion_rate\",\"definition_id\":\"conversion_paid_unique\",\"source_id\":\"metric_conversion_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-01-01\",\"reason\":\"最新版本定义\"}",
+      "elapsed_seconds": 1.187,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 510,
+        "prompt_tokens_details": {
+          "cached_tokens": 509
+        },
+        "total_tokens": 578
+      },
+      "request_id": "2026072323583841c0572968264da4",
+      "error": null
+    },
+    {
+      "id": "c01_new_first",
+      "question": "请给出公司当前采用的“转化率”指标口径。",
+      "metric_id": "conversion_rate",
+      "tags": [
+        "new_first",
+        "conversion_rate"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_conversion_v2"
+      ],
+      "last_source_id": "metric_conversion_v2",
+      "expected": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "conversion_rate",
+        "definition_id": "conversion_paid_unique",
+        "source_id": "metric_conversion_v2",
+        "version": "2.0",
+        "effective_date": "2025-01-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"conversion_rate\",\"definition_id\":\"conversion_paid_unique\",\"source_id\":\"metric_conversion_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-01-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.943,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 390,
+        "prompt_tokens_details": {
+          "cached_tokens": 389
+        },
+        "total_tokens": 458
+      },
+      "request_id": "2026072323583919c77fab813d476f",
+      "error": null
+    },
+    {
+      "id": "c02_old_first",
+      "question": "请给出公司当前采用的“活跃用户”指标口径。",
+      "metric_id": "active_user",
+      "tags": [
+        "old_first",
+        "active_user"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_active_user_v1",
+        "metric_active_user_v2"
+      ],
+      "last_source_id": "metric_active_user_v2",
+      "expected": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15",
+        "reason": "最新版本且标记为is_latest"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"active_user\",\"definition_id\":\"active_action_7d\",\"source_id\":\"metric_active_user_v2\",\"version\":\"2.1\",\"effective_date\":\"2025-02-15\",\"reason\":\"最新版本且标记为is_latest\"}",
+      "elapsed_seconds": 1.01,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 474,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 549
+      },
+      "request_id": "20260723235840cc7f760625e74135",
+      "error": null
+    },
+    {
+      "id": "c02_old_first",
+      "question": "请给出公司当前采用的“活跃用户”指标口径。",
+      "metric_id": "active_user",
+      "tags": [
+        "old_first",
+        "active_user"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_active_user_v1",
+        "metric_active_user_v2"
+      ],
+      "last_source_id": "metric_active_user_v2",
+      "expected": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"active_user\",\"definition_id\":\"active_action_7d\",\"source_id\":\"metric_active_user_v2\",\"version\":\"2.1\",\"effective_date\":\"2025-02-15\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 1.024,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 518,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 593
+      },
+      "request_id": "20260723235842a24a600d3a604a65",
+      "error": null
+    },
+    {
+      "id": "c02_old_first",
+      "question": "请给出公司当前采用的“活跃用户”指标口径。",
+      "metric_id": "active_user",
+      "tags": [
+        "old_first",
+        "active_user"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_active_user_v2"
+      ],
+      "last_source_id": "metric_active_user_v2",
+      "expected": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"active_user\",\"definition_id\":\"active_action_7d\",\"source_id\":\"metric_active_user_v2\",\"version\":\"2.1\",\"effective_date\":\"2025-02-15\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.123,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 394,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 466
+      },
+      "request_id": "20260723235843a53a7e443300417f",
+      "error": null
+    },
+    {
+      "id": "c02_new_first",
+      "question": "请给出公司当前采用的“活跃用户”指标口径。",
+      "metric_id": "active_user",
+      "tags": [
+        "new_first",
+        "active_user"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_active_user_v2",
+        "metric_active_user_v1"
+      ],
+      "last_source_id": "metric_active_user_v1",
+      "expected": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"active_user\",\"definition_id\":\"active_action_7d\",\"source_id\":\"metric_active_user_v2\",\"version\":\"2.1\",\"effective_date\":\"2025-02-15\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.116,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 474,
+        "prompt_tokens_details": {
+          "cached_tokens": 372
+        },
+        "total_tokens": 546
+      },
+      "request_id": "202607232358442961f9e3af8f43b7",
+      "error": null
+    },
+    {
+      "id": "c02_new_first",
+      "question": "请给出公司当前采用的“活跃用户”指标口径。",
+      "metric_id": "active_user",
+      "tags": [
+        "new_first",
+        "active_user"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_active_user_v2",
+        "metric_active_user_v1"
+      ],
+      "last_source_id": "metric_active_user_v1",
+      "expected": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"active_user\",\"definition_id\":\"active_action_7d\",\"source_id\":\"metric_active_user_v2\",\"version\":\"2.1\",\"effective_date\":\"2025-02-15\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.005,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 518,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 590
+      },
+      "request_id": "20260723235846a987283564b949aa",
+      "error": null
+    },
+    {
+      "id": "c02_new_first",
+      "question": "请给出公司当前采用的“活跃用户”指标口径。",
+      "metric_id": "active_user",
+      "tags": [
+        "new_first",
+        "active_user"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_active_user_v2"
+      ],
+      "last_source_id": "metric_active_user_v2",
+      "expected": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "active_user",
+        "definition_id": "active_action_7d",
+        "source_id": "metric_active_user_v2",
+        "version": "2.1",
+        "effective_date": "2025-02-15",
+        "reason": "最新版本指标口径"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"active_user\",\"definition_id\":\"active_action_7d\",\"source_id\":\"metric_active_user_v2\",\"version\":\"2.1\",\"effective_date\":\"2025-02-15\",\"reason\":\"最新版本指标口径\"}",
+      "elapsed_seconds": 1.051,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 394,
+        "prompt_tokens_details": {
+          "cached_tokens": 393
+        },
+        "total_tokens": 466
+      },
+      "request_id": "20260723235847a957783f11dd4990",
+      "error": null
+    },
+    {
+      "id": "c03_old_first",
+      "question": "请给出公司当前采用的“营业收入”指标口径。",
+      "metric_id": "revenue",
+      "tags": [
+        "old_first",
+        "revenue"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_revenue_v1",
+        "metric_revenue_v2"
+      ],
+      "last_source_id": "metric_revenue_v2",
+      "expected": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01",
+        "reason": "最新版本，标记为is_latest"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"revenue\",\"definition_id\":\"revenue_net_refund\",\"source_id\":\"metric_revenue_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-03-01\",\"reason\":\"最新版本，标记为is_latest\"}",
+      "elapsed_seconds": 1.021,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 471,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 546
+      },
+      "request_id": "202607232358481eb11808f0e744f4",
+      "error": null
+    },
+    {
+      "id": "c03_old_first",
+      "question": "请给出公司当前采用的“营业收入”指标口径。",
+      "metric_id": "revenue",
+      "tags": [
+        "old_first",
+        "revenue"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_revenue_v1",
+        "metric_revenue_v2"
+      ],
+      "last_source_id": "metric_revenue_v2",
+      "expected": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"revenue\",\"definition_id\":\"revenue_net_refund\",\"source_id\":\"metric_revenue_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-03-01\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 1.728,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 515,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 590
+      },
+      "request_id": "20260723235850591cf47fe9ed412d",
+      "error": null
+    },
+    {
+      "id": "c03_old_first",
+      "question": "请给出公司当前采用的“营业收入”指标口径。",
+      "metric_id": "revenue",
+      "tags": [
+        "old_first",
+        "revenue"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_revenue_v2"
+      ],
+      "last_source_id": "metric_revenue_v2",
+      "expected": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01",
+        "reason": "最新版本且标记为当前采用"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"revenue\",\"definition_id\":\"revenue_net_refund\",\"source_id\":\"metric_revenue_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-03-01\",\"reason\":\"最新版本且标记为当前采用\"}",
+      "elapsed_seconds": 1.1,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 391,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 466
+      },
+      "request_id": "20260723235852884b56c520864ad8",
+      "error": null
+    },
+    {
+      "id": "c03_new_first",
+      "question": "请给出公司当前采用的“营业收入”指标口径。",
+      "metric_id": "revenue",
+      "tags": [
+        "new_first",
+        "revenue"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_revenue_v2",
+        "metric_revenue_v1"
+      ],
+      "last_source_id": "metric_revenue_v1",
+      "expected": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01",
+        "reason": "最新版本口径"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"revenue\",\"definition_id\":\"revenue_net_refund\",\"source_id\":\"metric_revenue_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-03-01\",\"reason\":\"最新版本口径\"}",
+      "elapsed_seconds": 0.978,
+      "usage": {
+        "completion_tokens": 71,
+        "prompt_tokens": 471,
+        "prompt_tokens_details": {
+          "cached_tokens": 370
+        },
+        "total_tokens": 542
+      },
+      "request_id": "202607232358534bd6424c856c45bb",
+      "error": null
+    },
+    {
+      "id": "c03_new_first",
+      "question": "请给出公司当前采用的“营业收入”指标口径。",
+      "metric_id": "revenue",
+      "tags": [
+        "new_first",
+        "revenue"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_revenue_v2",
+        "metric_revenue_v1"
+      ],
+      "last_source_id": "metric_revenue_v1",
+      "expected": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01",
+        "reason": "最新版本且effective_date较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"revenue\",\"definition_id\":\"revenue_net_refund\",\"source_id\":\"metric_revenue_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-03-01\",\"reason\":\"最新版本且effective_date较新\"}",
+      "elapsed_seconds": 1.289,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 515,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 590
+      },
+      "request_id": "20260723235855441aa75032074efd",
+      "error": null
+    },
+    {
+      "id": "c03_new_first",
+      "question": "请给出公司当前采用的“营业收入”指标口径。",
+      "metric_id": "revenue",
+      "tags": [
+        "new_first",
+        "revenue"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_revenue_v2"
+      ],
+      "last_source_id": "metric_revenue_v2",
+      "expected": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "revenue",
+        "definition_id": "revenue_net_refund",
+        "source_id": "metric_revenue_v2",
+        "version": "2.0",
+        "effective_date": "2025-03-01",
+        "reason": "最新版本指标口径"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"revenue\",\"definition_id\":\"revenue_net_refund\",\"source_id\":\"metric_revenue_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-03-01\",\"reason\":\"最新版本指标口径\"}",
+      "elapsed_seconds": 0.979,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 391,
+        "prompt_tokens_details": {
+          "cached_tokens": 390
+        },
+        "total_tokens": 463
+      },
+      "request_id": "2026072323585659ebaad373664889",
+      "error": null
+    },
+    {
+      "id": "c04_old_first",
+      "question": "请给出公司当前采用的“流失率”指标口径。",
+      "metric_id": "churn_rate",
+      "tags": [
+        "old_first",
+        "churn_rate"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_churn_v1",
+        "metric_churn_v2"
+      ],
+      "last_source_id": "metric_churn_v2",
+      "expected": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"churn_rate\",\"definition_id\":\"churn_start_base\",\"source_id\":\"metric_churn_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-04-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.04,
+      "usage": {
+        "completion_tokens": 71,
+        "prompt_tokens": 474,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 545
+      },
+      "request_id": "20260723235857dac207c3f5444033",
+      "error": null
+    },
+    {
+      "id": "c04_old_first",
+      "question": "请给出公司当前采用的“流失率”指标口径。",
+      "metric_id": "churn_rate",
+      "tags": [
+        "old_first",
+        "churn_rate"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_churn_v1",
+        "metric_churn_v2"
+      ],
+      "last_source_id": "metric_churn_v2",
+      "expected": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"churn_rate\",\"definition_id\":\"churn_start_base\",\"source_id\":\"metric_churn_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-04-01\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 1.106,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 518,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 593
+      },
+      "request_id": "20260723235859bea1cd234714454b",
+      "error": null
+    },
+    {
+      "id": "c04_old_first",
+      "question": "请给出公司当前采用的“流失率”指标口径。",
+      "metric_id": "churn_rate",
+      "tags": [
+        "old_first",
+        "churn_rate"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_churn_v2"
+      ],
+      "last_source_id": "metric_churn_v2",
+      "expected": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"churn_rate\",\"definition_id\":\"churn_start_base\",\"source_id\":\"metric_churn_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-04-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.302,
+      "usage": {
+        "completion_tokens": 71,
+        "prompt_tokens": 393,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 464
+      },
+      "request_id": "202607232359009d7c01eda5574815",
+      "error": null
+    },
+    {
+      "id": "c04_new_first",
+      "question": "请给出公司当前采用的“流失率”指标口径。",
+      "metric_id": "churn_rate",
+      "tags": [
+        "new_first",
+        "churn_rate"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_churn_v2",
+        "metric_churn_v1"
+      ],
+      "last_source_id": "metric_churn_v1",
+      "expected": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01",
+        "reason": "最新版本指标口径"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"churn_rate\",\"definition_id\":\"churn_start_base\",\"source_id\":\"metric_churn_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-04-01\",\"reason\":\"最新版本指标口径\"}",
+      "elapsed_seconds": 1.001,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 474,
+        "prompt_tokens_details": {
+          "cached_tokens": 371
+        },
+        "total_tokens": 546
+      },
+      "request_id": "2026072323590283dacecddd664a59",
+      "error": null
+    },
+    {
+      "id": "c04_new_first",
+      "question": "请给出公司当前采用的“流失率”指标口径。",
+      "metric_id": "churn_rate",
+      "tags": [
+        "new_first",
+        "churn_rate"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_churn_v2",
+        "metric_churn_v1"
+      ],
+      "last_source_id": "metric_churn_v1",
+      "expected": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"churn_rate\",\"definition_id\":\"churn_start_base\",\"source_id\":\"metric_churn_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-04-01\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 1.047,
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 518,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 593
+      },
+      "request_id": "20260723235903efa50a75ce354700",
+      "error": null
+    },
+    {
+      "id": "c04_new_first",
+      "question": "请给出公司当前采用的“流失率”指标口径。",
+      "metric_id": "churn_rate",
+      "tags": [
+        "new_first",
+        "churn_rate"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_churn_v2"
+      ],
+      "last_source_id": "metric_churn_v2",
+      "expected": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "churn_rate",
+        "definition_id": "churn_start_base",
+        "source_id": "metric_churn_v2",
+        "version": "2.0",
+        "effective_date": "2025-04-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"churn_rate\",\"definition_id\":\"churn_start_base\",\"source_id\":\"metric_churn_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-04-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.014,
+      "usage": {
+        "completion_tokens": 71,
+        "prompt_tokens": 393,
+        "prompt_tokens_details": {
+          "cached_tokens": 392
+        },
+        "total_tokens": 464
+      },
+      "request_id": "2026072323590463989ab1b8a94649",
+      "error": null
+    },
+    {
+      "id": "c05_old_first",
+      "question": "请给出公司当前采用的“响应时长”指标口径。",
+      "metric_id": "response_time",
+      "tags": [
+        "old_first",
+        "response_time"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_response_time_v1",
+        "metric_response_time_v2"
+      ],
+      "last_source_id": "metric_response_time_v2",
+      "expected": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01",
+        "reason": "最新版本且标记为is_latest"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"response_time\",\"definition_id\":\"response_p95\",\"source_id\":\"metric_response_time_v2\",\"version\":\"2.2\",\"effective_date\":\"2025-05-01\",\"reason\":\"最新版本且标记为is_latest\"}",
+      "elapsed_seconds": 0.963,
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 468,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 541
+      },
+      "request_id": "202607232359067d830e4ed8cb4110",
+      "error": null
+    },
+    {
+      "id": "c05_old_first",
+      "question": "请给出公司当前采用的“响应时长”指标口径。",
+      "metric_id": "response_time",
+      "tags": [
+        "old_first",
+        "response_time"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_response_time_v1",
+        "metric_response_time_v2"
+      ],
+      "last_source_id": "metric_response_time_v2",
+      "expected": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01",
+        "reason": "最新版本且有效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"response_time\",\"definition_id\":\"response_p95\",\"source_id\":\"metric_response_time_v2\",\"version\":\"2.2\",\"effective_date\":\"2025-05-01\",\"reason\":\"最新版本且有效日期较新\"}",
+      "elapsed_seconds": 1.215,
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 512,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 585
+      },
+      "request_id": "2026072323590710f806280312471e",
+      "error": null
+    },
+    {
+      "id": "c05_old_first",
+      "question": "请给出公司当前采用的“响应时长”指标口径。",
+      "metric_id": "response_time",
+      "tags": [
+        "old_first",
+        "response_time"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_response_time_v2"
+      ],
+      "last_source_id": "metric_response_time_v2",
+      "expected": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"response_time\",\"definition_id\":\"response_p95\",\"source_id\":\"metric_response_time_v2\",\"version\":\"2.2\",\"effective_date\":\"2025-05-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.002,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 391,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 460
+      },
+      "request_id": "20260723235908cc73056fc7fa4f7a",
+      "error": null
+    },
+    {
+      "id": "c05_new_first",
+      "question": "请给出公司当前采用的“响应时长”指标口径。",
+      "metric_id": "response_time",
+      "tags": [
+        "new_first",
+        "response_time"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_response_time_v2",
+        "metric_response_time_v1"
+      ],
+      "last_source_id": "metric_response_time_v1",
+      "expected": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01",
+        "reason": "当前最新版本"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"response_time\",\"definition_id\":\"response_p95\",\"source_id\":\"metric_response_time_v2\",\"version\":\"2.2\",\"effective_date\":\"2025-05-01\",\"reason\":\"当前最新版本\"}",
+      "elapsed_seconds": 1.057,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 468,
+        "prompt_tokens_details": {
+          "cached_tokens": 369
+        },
+        "total_tokens": 537
+      },
+      "request_id": "20260723235910d68a085a02ca48fa",
+      "error": null
+    },
+    {
+      "id": "c05_new_first",
+      "question": "请给出公司当前采用的“响应时长”指标口径。",
+      "metric_id": "response_time",
+      "tags": [
+        "new_first",
+        "response_time"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_response_time_v2",
+        "metric_response_time_v1"
+      ],
+      "last_source_id": "metric_response_time_v1",
+      "expected": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"response_time\",\"definition_id\":\"response_p95\",\"source_id\":\"metric_response_time_v2\",\"version\":\"2.2\",\"effective_date\":\"2025-05-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.967,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 512,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 581
+      },
+      "request_id": "20260723235911ab02ffd029dc49f3",
+      "error": null
+    },
+    {
+      "id": "c05_new_first",
+      "question": "请给出公司当前采用的“响应时长”指标口径。",
+      "metric_id": "response_time",
+      "tags": [
+        "new_first",
+        "response_time"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_response_time_v2"
+      ],
+      "last_source_id": "metric_response_time_v2",
+      "expected": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "response_time",
+        "definition_id": "response_p95",
+        "source_id": "metric_response_time_v2",
+        "version": "2.2",
+        "effective_date": "2025-05-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"response_time\",\"definition_id\":\"response_p95\",\"source_id\":\"metric_response_time_v2\",\"version\":\"2.2\",\"effective_date\":\"2025-05-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.948,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 391,
+        "prompt_tokens_details": {
+          "cached_tokens": 390
+        },
+        "total_tokens": 460
+      },
+      "request_id": "20260723235912952c8be56b074afb",
+      "error": null
+    },
+    {
+      "id": "c06_old_first",
+      "question": "请给出公司当前采用的“可用库存”指标口径。",
+      "metric_id": "available_inventory",
+      "tags": [
+        "old_first",
+        "available_inventory"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_inventory_v1",
+        "metric_inventory_v2"
+      ],
+      "last_source_id": "metric_inventory_v2",
+      "expected": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"available_inventory\",\"definition_id\":\"inventory_minus_reserved\",\"source_id\":\"metric_inventory_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-06-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.021,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 462,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 530
+      },
+      "request_id": "2026072323591424b3759b16054957",
+      "error": null
+    },
+    {
+      "id": "c06_old_first",
+      "question": "请给出公司当前采用的“可用库存”指标口径。",
+      "metric_id": "available_inventory",
+      "tags": [
+        "old_first",
+        "available_inventory"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_inventory_v1",
+        "metric_inventory_v2"
+      ],
+      "last_source_id": "metric_inventory_v2",
+      "expected": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"available_inventory\",\"definition_id\":\"inventory_minus_reserved\",\"source_id\":\"metric_inventory_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-06-01\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 1.045,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 506,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 578
+      },
+      "request_id": "20260723235915f55764a9331943fc",
+      "error": null
+    },
+    {
+      "id": "c06_old_first",
+      "question": "请给出公司当前采用的“可用库存”指标口径。",
+      "metric_id": "available_inventory",
+      "tags": [
+        "old_first",
+        "available_inventory"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_inventory_v2"
+      ],
+      "last_source_id": "metric_inventory_v2",
+      "expected": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"available_inventory\",\"definition_id\":\"inventory_minus_reserved\",\"source_id\":\"metric_inventory_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-06-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.481,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 389,
+        "prompt_tokens_details": {
+          "cached_tokens": 302
+        },
+        "total_tokens": 458
+      },
+      "request_id": "2026072323591678e9fbf35df140bb",
+      "error": null
+    },
+    {
+      "id": "c06_new_first",
+      "question": "请给出公司当前采用的“可用库存”指标口径。",
+      "metric_id": "available_inventory",
+      "tags": [
+        "new_first",
+        "available_inventory"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_inventory_v2",
+        "metric_inventory_v1"
+      ],
+      "last_source_id": "metric_inventory_v1",
+      "expected": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"available_inventory\",\"definition_id\":\"inventory_minus_reserved\",\"source_id\":\"metric_inventory_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-06-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 0.998,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 462,
+        "prompt_tokens_details": {
+          "cached_tokens": 367
+        },
+        "total_tokens": 531
+      },
+      "request_id": "20260723235918e1a51637a37e4d98",
+      "error": null
+    },
+    {
+      "id": "c06_new_first",
+      "question": "请给出公司当前采用的“可用库存”指标口径。",
+      "metric_id": "available_inventory",
+      "tags": [
+        "new_first",
+        "available_inventory"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_inventory_v2",
+        "metric_inventory_v1"
+      ],
+      "last_source_id": "metric_inventory_v1",
+      "expected": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"available_inventory\",\"definition_id\":\"inventory_minus_reserved\",\"source_id\":\"metric_inventory_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-06-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.127,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 506,
+        "prompt_tokens_details": {
+          "cached_tokens": 346
+        },
+        "total_tokens": 575
+      },
+      "request_id": "2026072323591900ff7d4dfad44fbb",
+      "error": null
+    },
+    {
+      "id": "c06_new_first",
+      "question": "请给出公司当前采用的“可用库存”指标口径。",
+      "metric_id": "available_inventory",
+      "tags": [
+        "new_first",
+        "available_inventory"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_inventory_v2"
+      ],
+      "last_source_id": "metric_inventory_v2",
+      "expected": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "available_inventory",
+        "definition_id": "inventory_minus_reserved",
+        "source_id": "metric_inventory_v2",
+        "version": "2.0",
+        "effective_date": "2025-06-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"available_inventory\",\"definition_id\":\"inventory_minus_reserved\",\"source_id\":\"metric_inventory_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-06-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.057,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 389,
+        "prompt_tokens_details": {
+          "cached_tokens": 388
+        },
+        "total_tokens": 458
+      },
+      "request_id": "202607232359219cc98ce43b6d4434",
+      "error": null
+    },
+    {
+      "id": "c07_old_first",
+      "question": "请给出公司当前采用的“新增用户”指标口径。",
+      "metric_id": "new_user",
+      "tags": [
+        "old_first",
+        "new_user"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_new_user_v1",
+        "metric_new_user_v2"
+      ],
+      "last_source_id": "metric_new_user_v2",
+      "expected": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"new_user\",\"definition_id\":\"new_user_activated\",\"source_id\":\"metric_new_user_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-07-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.996,
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 464,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 534
+      },
+      "request_id": "20260723235922297a04af3f2b46dd",
+      "error": null
+    },
+    {
+      "id": "c07_old_first",
+      "question": "请给出公司当前采用的“新增用户”指标口径。",
+      "metric_id": "new_user",
+      "tags": [
+        "old_first",
+        "new_user"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_new_user_v1",
+        "metric_new_user_v2"
+      ],
+      "last_source_id": "metric_new_user_v2",
+      "expected": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"new_user\",\"definition_id\":\"new_user_activated\",\"source_id\":\"metric_new_user_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-07-01\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 1.284,
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 508,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 582
+      },
+      "request_id": "202607232359233449d035b873476b",
+      "error": null
+    },
+    {
+      "id": "c07_old_first",
+      "question": "请给出公司当前采用的“新增用户”指标口径。",
+      "metric_id": "new_user",
+      "tags": [
+        "old_first",
+        "new_user"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_new_user_v2"
+      ],
+      "last_source_id": "metric_new_user_v2",
+      "expected": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"new_user\",\"definition_id\":\"new_user_activated\",\"source_id\":\"metric_new_user_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-07-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.96,
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 389,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 459
+      },
+      "request_id": "202607232359257e2c6fb6e1ff4f72",
+      "error": null
+    },
+    {
+      "id": "c07_new_first",
+      "question": "请给出公司当前采用的“新增用户”指标口径。",
+      "metric_id": "new_user",
+      "tags": [
+        "new_first",
+        "new_user"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_new_user_v2",
+        "metric_new_user_v1"
+      ],
+      "last_source_id": "metric_new_user_v1",
+      "expected": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"new_user\",\"definition_id\":\"new_user_activated\",\"source_id\":\"metric_new_user_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-07-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.049,
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 464,
+        "prompt_tokens_details": {
+          "cached_tokens": 367
+        },
+        "total_tokens": 534
+      },
+      "request_id": "202607232359261e933413af8042b9",
+      "error": null
+    },
+    {
+      "id": "c07_new_first",
+      "question": "请给出公司当前采用的“新增用户”指标口径。",
+      "metric_id": "new_user",
+      "tags": [
+        "new_first",
+        "new_user"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_new_user_v2",
+        "metric_new_user_v1"
+      ],
+      "last_source_id": "metric_new_user_v1",
+      "expected": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01",
+        "reason": "最新版本定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"new_user\",\"definition_id\":\"new_user_activated\",\"source_id\":\"metric_new_user_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-07-01\",\"reason\":\"最新版本定义\"}",
+      "elapsed_seconds": 1.013,
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 508,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 578
+      },
+      "request_id": "202607232359286637d02ee6454b68",
+      "error": null
+    },
+    {
+      "id": "c07_new_first",
+      "question": "请给出公司当前采用的“新增用户”指标口径。",
+      "metric_id": "new_user",
+      "tags": [
+        "new_first",
+        "new_user"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_new_user_v2"
+      ],
+      "last_source_id": "metric_new_user_v2",
+      "expected": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "new_user",
+        "definition_id": "new_user_activated",
+        "source_id": "metric_new_user_v2",
+        "version": "2.0",
+        "effective_date": "2025-07-01",
+        "reason": "最新版本且标记为当前采用"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"new_user\",\"definition_id\":\"new_user_activated\",\"source_id\":\"metric_new_user_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-07-01\",\"reason\":\"最新版本且标记为当前采用\"}",
+      "elapsed_seconds": 1.054,
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 389,
+        "prompt_tokens_details": {
+          "cached_tokens": 388
+        },
+        "total_tokens": 463
+      },
+      "request_id": "20260723235929e3dcdf3cb9354c28",
+      "error": null
+    },
+    {
+      "id": "c08_old_first",
+      "question": "请给出公司当前采用的“退款率”指标口径。",
+      "metric_id": "refund_rate",
+      "tags": [
+        "old_first",
+        "refund_rate"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_refund_v1",
+        "metric_refund_v2"
+      ],
+      "last_source_id": "metric_refund_v2",
+      "expected": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"refund_rate\",\"definition_id\":\"refund_completed_paid\",\"source_id\":\"metric_refund_v2\",\"version\":\"2.3\",\"effective_date\":\"2025-08-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.95,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 468,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 537
+      },
+      "request_id": "20260723235930407e53894d8443bd",
+      "error": null
+    },
+    {
+      "id": "c08_old_first",
+      "question": "请给出公司当前采用的“退款率”指标口径。",
+      "metric_id": "refund_rate",
+      "tags": [
+        "old_first",
+        "refund_rate"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_refund_v1",
+        "metric_refund_v2"
+      ],
+      "last_source_id": "metric_refund_v2",
+      "expected": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01",
+        "reason": "最新版本且生效日期较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"refund_rate\",\"definition_id\":\"refund_completed_paid\",\"source_id\":\"metric_refund_v2\",\"version\":\"2.3\",\"effective_date\":\"2025-08-01\",\"reason\":\"最新版本且生效日期较新\"}",
+      "elapsed_seconds": 0.999,
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 512,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 585
+      },
+      "request_id": "20260723235932eff84814f2e4444b",
+      "error": null
+    },
+    {
+      "id": "c08_old_first",
+      "question": "请给出公司当前采用的“退款率”指标口径。",
+      "metric_id": "refund_rate",
+      "tags": [
+        "old_first",
+        "refund_rate"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_refund_v2"
+      ],
+      "last_source_id": "metric_refund_v2",
+      "expected": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"refund_rate\",\"definition_id\":\"refund_completed_paid\",\"source_id\":\"metric_refund_v2\",\"version\":\"2.3\",\"effective_date\":\"2025-08-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.002,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 390,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 459
+      },
+      "request_id": "2026072323593387c4b678ecaa4dd4",
+      "error": null
+    },
+    {
+      "id": "c08_new_first",
+      "question": "请给出公司当前采用的“退款率”指标口径。",
+      "metric_id": "refund_rate",
+      "tags": [
+        "new_first",
+        "refund_rate"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_refund_v2",
+        "metric_refund_v1"
+      ],
+      "last_source_id": "metric_refund_v1",
+      "expected": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"refund_rate\",\"definition_id\":\"refund_completed_paid\",\"source_id\":\"metric_refund_v2\",\"version\":\"2.3\",\"effective_date\":\"2025-08-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.562,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 468,
+        "prompt_tokens_details": {
+          "cached_tokens": 368
+        },
+        "total_tokens": 537
+      },
+      "request_id": "202607232359341aeb0bfe2d2d49c2",
+      "error": null
+    },
+    {
+      "id": "c08_new_first",
+      "question": "请给出公司当前采用的“退款率”指标口径。",
+      "metric_id": "refund_rate",
+      "tags": [
+        "new_first",
+        "refund_rate"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_refund_v2",
+        "metric_refund_v1"
+      ],
+      "last_source_id": "metric_refund_v1",
+      "expected": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"refund_rate\",\"definition_id\":\"refund_completed_paid\",\"source_id\":\"metric_refund_v2\",\"version\":\"2.3\",\"effective_date\":\"2025-08-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.951,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 512,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 581
+      },
+      "request_id": "20260723235936ba099d0cfc034f47",
+      "error": null
+    },
+    {
+      "id": "c08_new_first",
+      "question": "请给出公司当前采用的“退款率”指标口径。",
+      "metric_id": "refund_rate",
+      "tags": [
+        "new_first",
+        "refund_rate"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_refund_v2"
+      ],
+      "last_source_id": "metric_refund_v2",
+      "expected": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "refund_rate",
+        "definition_id": "refund_completed_paid",
+        "source_id": "metric_refund_v2",
+        "version": "2.3",
+        "effective_date": "2025-08-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"refund_rate\",\"definition_id\":\"refund_completed_paid\",\"source_id\":\"metric_refund_v2\",\"version\":\"2.3\",\"effective_date\":\"2025-08-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 0.946,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 390,
+        "prompt_tokens_details": {
+          "cached_tokens": 389
+        },
+        "total_tokens": 459
+      },
+      "request_id": "202607232359374ccc237196ca4d56",
+      "error": null
+    },
+    {
+      "id": "c09_old_first",
+      "question": "请给出公司当前采用的“7 日留存率”指标口径。",
+      "metric_id": "day7_retention",
+      "tags": [
+        "old_first",
+        "day7_retention"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_retention_v1",
+        "metric_retention_v2"
+      ],
+      "last_source_id": "metric_retention_v2",
+      "expected": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"day7_retention\",\"definition_id\":\"retention_action_day7\",\"source_id\":\"metric_retention_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-09-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.011,
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 488,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 561
+      },
+      "request_id": "2026072323593883eb23fb4cf44586",
+      "error": null
+    },
+    {
+      "id": "c09_old_first",
+      "question": "请给出公司当前采用的“7 日留存率”指标口径。",
+      "metric_id": "day7_retention",
+      "tags": [
+        "old_first",
+        "day7_retention"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_retention_v1",
+        "metric_retention_v2"
+      ],
+      "last_source_id": "metric_retention_v2",
+      "expected": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"day7_retention\",\"definition_id\":\"retention_action_day7\",\"source_id\":\"metric_retention_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-09-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.156,
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 532,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 606
+      },
+      "request_id": "202607232359406d6b5c72208a4fd8",
+      "error": null
+    },
+    {
+      "id": "c09_old_first",
+      "question": "请给出公司当前采用的“7 日留存率”指标口径。",
+      "metric_id": "day7_retention",
+      "tags": [
+        "old_first",
+        "day7_retention"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_retention_v2"
+      ],
+      "last_source_id": "metric_retention_v2",
+      "expected": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01",
+        "reason": "文档中标记为最新版本"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"day7_retention\",\"definition_id\":\"retention_action_day7\",\"source_id\":\"metric_retention_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-09-01\",\"reason\":\"文档中标记为最新版本\"}",
+      "elapsed_seconds": 1.085,
+      "usage": {
+        "completion_tokens": 76,
+        "prompt_tokens": 402,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 478
+      },
+      "request_id": "2026072323594159592c0016904011",
+      "error": null
+    },
+    {
+      "id": "c09_new_first",
+      "question": "请给出公司当前采用的“7 日留存率”指标口径。",
+      "metric_id": "day7_retention",
+      "tags": [
+        "new_first",
+        "day7_retention"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_retention_v2",
+        "metric_retention_v1"
+      ],
+      "last_source_id": "metric_retention_v1",
+      "expected": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"day7_retention\",\"definition_id\":\"retention_action_day7\",\"source_id\":\"metric_retention_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-09-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.221,
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 488,
+        "prompt_tokens_details": {
+          "cached_tokens": 378
+        },
+        "total_tokens": 562
+      },
+      "request_id": "202607232359437713424d411c406e",
+      "error": null
+    },
+    {
+      "id": "c09_new_first",
+      "question": "请给出公司当前采用的“7 日留存率”指标口径。",
+      "metric_id": "day7_retention",
+      "tags": [
+        "new_first",
+        "day7_retention"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_retention_v2",
+        "metric_retention_v1"
+      ],
+      "last_source_id": "metric_retention_v1",
+      "expected": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"day7_retention\",\"definition_id\":\"retention_action_day7\",\"source_id\":\"metric_retention_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-09-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.052,
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 532,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 606
+      },
+      "request_id": "2026072323594403dc4c7589fb4ede",
+      "error": null
+    },
+    {
+      "id": "c09_new_first",
+      "question": "请给出公司当前采用的“7 日留存率”指标口径。",
+      "metric_id": "day7_retention",
+      "tags": [
+        "new_first",
+        "day7_retention"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_retention_v2"
+      ],
+      "last_source_id": "metric_retention_v2",
+      "expected": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "day7_retention",
+        "definition_id": "retention_action_day7",
+        "source_id": "metric_retention_v2",
+        "version": "2.0",
+        "effective_date": "2025-09-01",
+        "reason": "最新版本指标定义"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"day7_retention\",\"definition_id\":\"retention_action_day7\",\"source_id\":\"metric_retention_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-09-01\",\"reason\":\"最新版本指标定义\"}",
+      "elapsed_seconds": 1.065,
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 402,
+        "prompt_tokens_details": {
+          "cached_tokens": 401
+        },
+        "total_tokens": 476
+      },
+      "request_id": "20260723235946ff7fe6a389724b64",
+      "error": null
+    },
+    {
+      "id": "c10_old_first",
+      "question": "请给出公司当前采用的“订单量”指标口径。",
+      "metric_id": "order_count",
+      "tags": [
+        "old_first",
+        "order_count"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_order_count_v1",
+        "metric_order_count_v2"
+      ],
+      "last_source_id": "metric_order_count_v2",
+      "expected": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"order_count\",\"definition_id\":\"orders_paid\",\"source_id\":\"metric_order_count_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-10-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.059,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 462,
+        "prompt_tokens_details": {
+          "cached_tokens": 300
+        },
+        "total_tokens": 530
+      },
+      "request_id": "202607232359474c5df22f98dc44b3",
+      "error": null
+    },
+    {
+      "id": "c10_old_first",
+      "question": "请给出公司当前采用的“订单量”指标口径。",
+      "metric_id": "order_count",
+      "tags": [
+        "old_first",
+        "order_count"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_order_count_v1",
+        "metric_order_count_v2"
+      ],
+      "last_source_id": "metric_order_count_v2",
+      "expected": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01",
+        "reason": "最新版本且生效日期较晚"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"order_count\",\"definition_id\":\"orders_paid\",\"source_id\":\"metric_order_count_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-10-01\",\"reason\":\"最新版本且生效日期较晚\"}",
+      "elapsed_seconds": 1.049,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 506,
+        "prompt_tokens_details": {
+          "cached_tokens": 344
+        },
+        "total_tokens": 578
+      },
+      "request_id": "20260723235948fb7199c858934f04",
+      "error": null
+    },
+    {
+      "id": "c10_old_first",
+      "question": "请给出公司当前采用的“订单量”指标口径。",
+      "metric_id": "order_count",
+      "tags": [
+        "old_first",
+        "order_count"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_order_count_v2"
+      ],
+      "last_source_id": "metric_order_count_v2",
+      "expected": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01",
+        "reason": "最新版本指标"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"order_count\",\"definition_id\":\"orders_paid\",\"source_id\":\"metric_order_count_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-10-01\",\"reason\":\"最新版本指标\"}",
+      "elapsed_seconds": 1.022,
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 387,
+        "prompt_tokens_details": {
+          "cached_tokens": 303
+        },
+        "total_tokens": 455
+      },
+      "request_id": "202607232359506279571e12f54db1",
+      "error": null
+    },
+    {
+      "id": "c10_new_first",
+      "question": "请给出公司当前采用的“订单量”指标口径。",
+      "metric_id": "order_count",
+      "tags": [
+        "new_first",
+        "order_count"
+      ],
+      "variant": "no_priority",
+      "context_source_ids": [
+        "metric_order_count_v2",
+        "metric_order_count_v1"
+      ],
+      "last_source_id": "metric_order_count_v1",
+      "expected": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01",
+        "reason": "当前最新版本，统计支付成功的订单数量"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"order_count\",\"definition_id\":\"orders_paid\",\"source_id\":\"metric_order_count_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-10-01\",\"reason\":\"当前最新版本，统计支付成功的订单数量\"}",
+      "elapsed_seconds": 1.023,
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 462,
+        "prompt_tokens_details": {
+          "cached_tokens": 365
+        },
+        "total_tokens": 536
+      },
+      "request_id": "2026072323595174ae56025a574a66",
+      "error": null
+    },
+    {
+      "id": "c10_new_first",
+      "question": "请给出公司当前采用的“订单量”指标口径。",
+      "metric_id": "order_count",
+      "tags": [
+        "new_first",
+        "order_count"
+      ],
+      "variant": "priority_rule",
+      "context_source_ids": [
+        "metric_order_count_v2",
+        "metric_order_count_v1"
+      ],
+      "last_source_id": "metric_order_count_v1",
+      "expected": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01",
+        "reason": "最新版本且effective_date较新"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": false,
+      "raw": "{\"metric_id\":\"order_count\",\"definition_id\":\"orders_paid\",\"source_id\":\"metric_order_count_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-10-01\",\"reason\":\"最新版本且effective_date较新\"}",
+      "elapsed_seconds": 1.085,
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 506,
+        "prompt_tokens_details": {
+          "cached_tokens": 347
+        },
+        "total_tokens": 578
+      },
+      "request_id": "202607232359529c918ba702ce4b6f",
+      "error": null
+    },
+    {
+      "id": "c10_new_first",
+      "question": "请给出公司当前采用的“订单量”指标口径。",
+      "metric_id": "order_count",
+      "tags": [
+        "new_first",
+        "order_count"
+      ],
+      "variant": "latest_only",
+      "context_source_ids": [
+        "metric_order_count_v2"
+      ],
+      "last_source_id": "metric_order_count_v2",
+      "expected": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01"
+      },
+      "api_ok": true,
+      "format_ok": true,
+      "predicted": {
+        "metric_id": "order_count",
+        "definition_id": "orders_paid",
+        "source_id": "metric_order_count_v2",
+        "version": "2.0",
+        "effective_date": "2025-10-01",
+        "reason": "最新版本指标口径"
+      },
+      "definition_correct": true,
+      "source_correct": true,
+      "fully_correct": true,
+      "grounded_source": true,
+      "selected_old_source": false,
+      "selected_last_document": true,
+      "raw": "{\"metric_id\":\"order_count\",\"definition_id\":\"orders_paid\",\"source_id\":\"metric_order_count_v2\",\"version\":\"2.0\",\"effective_date\":\"2025-10-01\",\"reason\":\"最新版本指标口径\"}",
+      "elapsed_seconds": 1.532,
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 387,
+        "prompt_tokens_details": {
+          "cached_tokens": 386
+        },
+        "total_tokens": 456
+      },
+      "request_id": "2026072323595499e1d81f9a9c41bc",
+      "error": null
+    }
+  ]
+}
