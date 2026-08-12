@@ -6,19 +6,19 @@
       "api_success_rate": 1.0,
       "format_pass_rate": 0.0,
       "accuracy": 0.0,
-      "avg_latency_seconds": 2.26,
-      "prompt_tokens": 64,
-      "completion_tokens": 384
+      "avg_latency_seconds": 5.688,
+      "prompt_tokens": 43,
+      "completion_tokens": 2502
     },
     {
       "variant": "B",
       "samples": 3,
       "api_success_rate": 1.0,
-      "format_pass_rate": 0.0,
-      "accuracy": 0.0,
-      "avg_latency_seconds": 0.568,
-      "prompt_tokens": 487,
-      "completion_tokens": 69
+      "format_pass_rate": 1.0,
+      "accuracy": 1.0,
+      "avg_latency_seconds": 2.67,
+      "prompt_tokens": 547,
+      "completion_tokens": 71
     }
   ],
   "records": [
@@ -34,17 +34,14 @@
       "format_ok": false,
       "predicted": null,
       "correct": false,
-      "raw": "好的，我们来全面地分析一下“什么是 RAG？”这个问题。\n\n这是一个在人工智能领域，特别是大语言模型应用中，非常核心且重要的问题。我会从定义、核心思想、工作流程、优势、挑战和应用场景等多个维度进行深入剖析。\n\n---\n\n### **一、核心定义：RAG 是什么？**\n\n**RAG** 的全称是 **Retrieval-Augmented Generation**，中文翻译为 **“检索增强生成”**。\n\n简单来说，RAG 是一种将**信息检索**与**内容生成**相结合的人工智能技术。它旨在解决传统大型语言模型（如 GPT",
-      "elapsed_seconds": 2.318,
+      "raw": "**RAG** 是 **Retrieval-Augmented Generation**（检索增强生成）的缩写。\n\n简单来说，它是一种**通过“外挂知识库”来提升大语言模型（LLM）回答准确性和时效性**的技术架构。\n\n为了让你更透彻地理解，我们可以从以下几个维度进行拆解：\n\n---\n\n### 1. 为什么需要 RAG？（痛点）\n大语言模型（如 ChatGPT）虽然强大，但存在三个核心缺陷：\n*   **知识截止日期**：模型的训练数据是静态的，无法获知训练之后发生的实时新闻或事件。\n*   **幻觉问题（Hallucination）**：当模型不知道答案时，它倾向于“一本正经地胡说八道”。\n*   **缺乏私有数据**：模型无法直接访问你的企业内部文档、个人笔记或实时数据库。\n\n**RAG 的出现，就是为了让模型在回答问题前，先去“查阅资料”。**\n\n---\n\n### 2. RAG 的工作原理（流程）\nRAG 的过程可以类比为“**开卷考试**”：\n\n1.  **检索（Retrieval）**：当用户提出问题时，系统不会直接让模型回答，而是先在你的知识库（文档、数据库、网页等）中搜索与问题相关的片段。\n2.  **增强（Augmentation）**：系统将搜索到的相关片段与用户的原始问题拼接在一起，形成一个包含“背景知识”的提示词（Prompt）。\n3.  **生成（Generation）**：将这个包含背景知识的提示词发给大模型，模型根据提供的资料进行总结和回答。\n\n---\n\n### 3. RAG 的核心优势\n*   **准确性高**：模型基于提供的参考资料回答，大大降低了“胡说八道”的概率。\n*   **时效性强**：只需更新知识库，无需重新训练模型，即可让模型掌握最新的信息。\n*   **可溯源**：模型可以明确指出它的回答是基于哪份文档的哪一段，用户可以点击链接核实。\n*   **成本低**：相比于对模型进行“微调（Fine-tuning）”，RAG 的部署和维护成本要低得多。\n\n---\n\n### 4. 一个形象的例子\n*   **没有 RAG 的模型**：像一个博学但记忆停留在两年前的教授。你问他“今天某某公司的股价是多少？”，他可能会根据过往经验瞎猜。\n*   **有 RAG 的模型**：像一个带着笔记本电脑的助手。你问他同样的问题，他会先上网搜索最新的股价信息，然后结合这些信息告诉你：“根据最新的财经新闻，该公司的股价是 X 元。”\n\n---\n\n### 5. 总结\nRAG 是目前企业落地 AI 应用的**首选方案**。它将大模型的“**逻辑推理能力**”与外部世界的“**实时数据**”结合起来，使得 AI 能够处理更专业、更复杂、更私密的任务。\n\n**一句话总结：RAG 就是给大模型配了一个“外挂大脑”，让它在回答问题前先查资料。**",
+      "elapsed_seconds": 5.509,
       "usage": {
-        "completion_tokens": 128,
-        "prompt_tokens": 19,
-        "prompt_tokens_details": {
-          "cached_tokens": 18
-        },
-        "total_tokens": 147
+        "completion_tokens": 698,
+        "total_tokens": 710,
+        "prompt_tokens": 12
       },
-      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='好的，我们来全面...语言模型（如 GPT', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='**RAG** 是 **Retrieval-...题前先查资料。**', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
     },
     {
       "id": "p01",
@@ -55,20 +52,17 @@
       ],
       "variant": "B",
       "api_ok": true,
-      "format_ok": false,
-      "predicted": null,
-      "correct": false,
-      "raw": "```json\n{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问概念定义\"\n}\n```",
-      "elapsed_seconds": 0.51,
+      "format_ok": true,
+      "predicted": "knowledge",
+      "correct": true,
+      "raw": "{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问关于RAG的概念定义\"\n}",
+      "elapsed_seconds": 2.915,
       "usage": {
-        "completion_tokens": 23,
-        "prompt_tokens": 160,
-        "prompt_tokens_details": {
-          "cached_tokens": 159
-        },
-        "total_tokens": 183
+        "completion_tokens": 24,
+        "total_tokens": 204,
+        "prompt_tokens": 180
       },
-      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='```json\\n{\\n  \"category\"...概念定义\"\\n}\\n```', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+      "error": null
     },
     {
       "id": "p02",
@@ -82,17 +76,14 @@
       "format_ok": false,
       "predicted": null,
       "correct": false,
-      "raw": "好的，我们来详细分析一下 Python 中 `list` 和 `set` 的区别。\n\n这是一个非常核心且重要的 Python 问题，理解它们的差异对于编写高效、正确的代码至关重要。\n\n我们可以从多个维度来剖析它们的区别：**数据结构、元素特性、操作性能、使用场景**等。\n\n---\n\n### 核心区别一览表\n\n| 特性 | `list` (列表) | `set` (集合) |\n| :--- | :--- | :--- |\n| **数据结构** | 有序的线性序列 | 无序的哈希表 |\n| **元素顺序** | **有序**，元素",
-      "elapsed_seconds": 2.221,
+      "raw": "在 Python 中，`list`（列表）和 `set`（集合）是两种最常用的内置数据结构。它们的主要区别可以从**底层实现、特性、使用场景**三个维度来分析：\n\n### 1. 核心区别总结表\n\n| 特性 | List (列表) | Set (集合) |\n| :--- | :--- | :--- |\n| **定义方式** | `[1, 2, 3]` | `{1, 2, 3}` |\n| **有序性** | 有序（记录插入顺序） | 无序（不记录插入顺序） |\n| **元素唯一性** | 允许重复元素 | 不允许重复元素（自动去重） |\n| **访问方式** | 通过索引（下标）访问 | 不支持索引访问 |\n| **底层实现** | 动态数组 | 哈希表 (Hash Table) |\n| **查找效率** | $O(n)$ | $O(1)$ |\n\n---\n\n### 2. 详细分析\n\n#### A. 有序性与索引 (Ordering & Indexing)\n*   **List** 是有序的序列。你可以通过索引（如 `my_list[0]`）获取元素，也可以进行切片操作。它维护了元素添加的先后顺序。\n*   **Set** 是无序的容器。它没有索引的概念，因此无法通过 `set[0]` 来访问元素。如果你遍历一个集合，输出的顺序可能与你插入的顺序完全不同。\n\n#### B. 唯一性 (Uniqueness)\n*   **List** 允许存储重复的元素。例如 `[1, 1, 2, 2]` 是合法的。\n*   **Set** 强制元素唯一。如果你尝试将重复元素放入集合，它会自动过滤掉。这使得 `set` 成为**去重**的最佳工具。\n\n#### C. 查找性能 (Performance)\n这是两者最本质的区别，源于底层实现：\n*   **List** 的查找是线性的。为了找到某个元素，Python 必须从头到尾遍历列表，时间复杂度为 **$O(n)$**。随着列表变大，查找速度会显著变慢。\n*   **Set** 基于哈希表实现。它通过计算元素的哈希值来定位，查找、添加、删除的时间复杂度均为 **$O(1)$**。这意味着无论集合中有 10 个元素还是 100 万个元素，查找速度几乎一样快。\n\n#### D. 元素要求 (Mutability)\n*   **List** 中的元素可以是任何类型（包括可变类型，如列表嵌套列表）。\n*   **Set** 中的元素必须是**可哈希的 (Hashable)**。这意味着元素必须是不可变的（如数字、字符串、元组）。你不能把一个 `list` 或另一个 `set` 放入 `set` 中。\n\n---\n\n### 3. 使用场景建议\n\n*   **使用 List 的场景：**\n    *   需要保持元素的顺序。\n    *   需要通过索引频繁访问元素。\n    *   数据存在重复且需要保留这些重复项。\n    *   数据需要频繁修改（如追加、插入、删除）。\n\n*   **使用 Set 的场景：**\n    *   **去重**：当你需要从一个列表中快速提取唯一值时（`list(set(my_list))`）。\n    *   **成员关系测试**：当你需要频繁判断某个元素是否存在于集合中时（例如 `if item in my_set`），使用 `set` 比 `list` 快得多。\n    *   **数学运算**：需要进行交集（`&`）、并集（`|`）、差集（`-`）等集合运算时。\n\n### 总结\n简单来说：**List 是为了“记录顺序和存储重复数据”而设计的，而 Set 是为了“快速查找和去重”而设计的。**",
+      "elapsed_seconds": 5.137,
       "usage": {
-        "completion_tokens": 128,
-        "prompt_tokens": 24,
-        "prompt_tokens_details": {
-          "cached_tokens": 10
-        },
-        "total_tokens": 152
+        "completion_tokens": 852,
+        "total_tokens": 869,
+        "prompt_tokens": 17
       },
-      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='好的，我们来详细...* | **有序**，元素', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='在 Python 中，`list`...重”而设计的。**', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
     },
     {
       "id": "p02",
@@ -103,20 +94,17 @@
       ],
       "variant": "B",
       "api_ok": true,
-      "format_ok": false,
-      "predicted": null,
-      "correct": false,
-      "raw": "```json\n{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问概念区别\"\n}\n```",
-      "elapsed_seconds": 0.637,
+      "format_ok": true,
+      "predicted": "knowledge",
+      "correct": true,
+      "raw": "{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问编程语言基础概念的区别\"\n}",
+      "elapsed_seconds": 2.556,
       "usage": {
-        "completion_tokens": 23,
-        "prompt_tokens": 165,
-        "prompt_tokens_details": {
-          "cached_tokens": 151
-        },
-        "total_tokens": 188
+        "completion_tokens": 24,
+        "total_tokens": 209,
+        "prompt_tokens": 185
       },
-      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='```json\\n{\\n  \"category\"...概念区别\"\\n}\\n```', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+      "error": null
     },
     {
       "id": "p03",
@@ -130,17 +118,14 @@
       "format_ok": false,
       "predicted": null,
       "correct": false,
-      "raw": "好的，我们来详细分析一下“Token（词元）”和“Character（字符）”的区别。\n\n这是一个在计算机科学、自然语言处理和编程领域都非常基础且重要的概念。简单来说，**字符是文本的最小组成单元，而词元是由字符组成的、有意义的语言单元。**\n\n下面我们从多个维度进行深入剖析。\n\n---\n\n### 一、核心定义与直观理解\n\n#### 1. 字符\n\n*   **定义**：字符是文本中最小的、不可再分的单位。它通常指的是一个字母、一个数字、一个标点符号或一个空格。\n*   **直观理解**",
-      "elapsed_seconds": 2.241,
+      "raw": "在自然语言处理（NLP）和大型语言模型（LLM）的语境下，**字符（Character）**和 **Token（词元）**是两个核心概念。理解它们的区别，是理解 AI 如何“阅读”和“理解”文本的关键。\n\n以下是详细的对比分析：\n\n---\n\n### 1. 定义上的区别\n\n*   **字符 (Character)：**\n    *   这是文本的**最小物理单位**。\n    *   在计算机中，它通常对应一个 Unicode 码位。\n    *   例如：字母（a, b, c）、数字（1, 2）、标点符号（! , .）、汉字（中, 文）以及空格。\n    *   **例子：** 单词 \"apple\" 由 5 个字符组成：`a`, `p`, `p`, `l`, `e`。\n\n*   **Token (词元)：**\n    *   这是模型处理文本的**最小语义/计算单位**。\n    *   Token 可以是一个单词、一个词的一部分、一个汉字，甚至是一个标点符号。\n    *   它是模型在训练时构建的“词表”（Vocabulary）中的一个索引编号。\n    *   **例子：** 单词 \"apple\" 在某些模型中可能就是一个 Token；而复杂的词如 \"unhappiness\" 可能会被拆分为 \"un\", \"happi\", \"ness\" 三个 Token。\n\n---\n\n### 2. 核心差异对比表\n\n| 维度 | 字符 (Character) | Token (词元) |\n| :--- | :--- | :--- |\n| **本质** | 文本的物理构成 | 模型的输入单元 |\n| **粒度** | 最细粒度 | 可变粒度（取决于分词算法） |\n| **语义** | 单个字符通常无完整语义 | Token 通常携带语义或语法信息 |\n| **处理方式** | 计算机直接存储 | 模型通过 Embedding（向量）映射 |\n| **长度关系** | 文本长度 = 字符数 | 文本长度 = Token 数（通常 Token 数 < 字符数） |\n\n---\n\n### 3. 为什么 AI 使用 Token 而不是字符？\n\n你可能会问：既然字符是基础，为什么 AI 不直接处理字符？主要原因有三点：\n\n1.  **计算效率（Context Window）：**\n    *   如果按字符处理，输入一段话的长度会非常长，这会消耗巨大的计算资源（Transformer 的计算复杂度与序列长度的平方成正比）。使用 Token 可以大幅压缩序列长度，让模型能“记住”更多内容。\n2.  **语义表达能力：**\n    *   单个字符（如 'a'）几乎没有意义。但 Token 可以是“apple”、“learning”这种具有完整意义的词，模型处理起来更容易捕捉上下文关系。\n3.  **处理未知词汇（OOV 问题）：**\n    *   如果模型只认识完整的单词，遇到没见过的词（如拼写错误的词或新造词）就会崩溃。通过将词拆解为子词（Sub-word）Token，模型可以处理任何文本，即使是没见过的词，也能通过拆解后的部分进行推断。\n\n---\n\n### 4. 形象的比喻\n\n*   **字符**就像是**“笔画”**：写字时，你一笔一划地写，但你不会按笔画去理解句子的意思。\n*   **Token**就像是**“积木块”**：有的积木块是一个完整的词，有的积木块是一个词根。AI 通过拼装这些积木块，来理解整句话的含义。\n\n---\n\n### 5. 实际案例分析\n\n以句子 **\"I love AI.\"** 为例：\n\n*   **字符视角：** `I`, ` `, `l`, `o`, `v`, `e`, ` `, `A`, `I`, `.` （共 10 个字符）\n*   **Token 视角：** `I`, ` love`, ` AI`, `.` （共 4 个 Token）\n\n**总结：**\n字符是文本的**原材料**，而 Token 是模型为了**高效处理和理解语义**而对原材料进行的“打包”或“切分”。在 AI 领域，我们通常通过 Token 的数量来衡量文本的长度和模型的处理能力。",
+      "elapsed_seconds": 6.418,
       "usage": {
-        "completion_tokens": 128,
-        "prompt_tokens": 21,
-        "prompt_tokens_details": {
-          "cached_tokens": 10
-        },
-        "total_tokens": 149
+        "completion_tokens": 952,
+        "total_tokens": 966,
+        "prompt_tokens": 14
       },
-      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='好的，我们来详细...\\n*   **直观理解**', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='在自然语言处理（...型的处理能力。', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
     },
     {
       "id": "p03",
@@ -151,20 +136,17 @@
       ],
       "variant": "B",
       "api_ok": true,
-      "format_ok": false,
-      "predicted": null,
-      "correct": false,
-      "raw": "```json\n{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问概念定义\"\n}\n```",
-      "elapsed_seconds": 0.558,
+      "format_ok": true,
+      "predicted": "knowledge",
+      "correct": true,
+      "raw": "{\n  \"category\": \"knowledge\",\n  \"reason\": \"询问概念定义与区别\"\n}",
+      "elapsed_seconds": 2.54,
       "usage": {
         "completion_tokens": 23,
-        "prompt_tokens": 162,
-        "prompt_tokens_details": {
-          "cached_tokens": 151
-        },
-        "total_tokens": 185
+        "total_tokens": 205,
+        "prompt_tokens": 182
       },
-      "error": "ValidationError: 1 validation error for Classification\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='```json\\n{\\n  \"category\"...概念定义\"\\n}\\n```', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+      "error": null
     }
   ]
 }

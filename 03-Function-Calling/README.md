@@ -4,6 +4,8 @@
 
 详细学习：[手写一个受控工具调用循环](./01-手写受控工具调用循环.md)。
 
+配套代码：[受控 Tool Calling 练习项目](./tool-calling-practice/README.md)。项目使用 fake model、Pydantic、SQLGlot 和 SQLite，实现本章要求的三个工具及完整 Guard 测试。
+
 微软教程补充：按 [LangChain 导读](../05-LangChain/02-微软LangChain教程导读.md) 学第 04 章，按 [AI Agents 导读](../06-LangGraph/02-微软AI-Agents教程导读.md) 学 Tool Use 设计模式；先手写循环，再看框架封装。
 
 ## 零基础前置
@@ -55,3 +57,16 @@
 | P1 | [Hugging Face Agents：Actions](https://huggingface.co/learn/agents-course/en/unit1/actions) | 用 JSON/code/function calling 和 stop-parse 解释模型文本如何成为外部动作 | 读完后画“生成动作→停止→解析→校验→执行→Observation”流程；不用安装 smolagents |
 
 最重要的不是记住某家模型 API，而是理解：模型只能提出调用，程序负责验证、授权、执行和停止循环。
+
+## 本地练习项目
+
+完整代码位于 [tool-calling-practice](./tool-calling-practice/README.md)。它不依赖 Agent 框架，先用 fake model 验证运行时：
+
+```powershell
+cd 03-Function-Calling/tool-calling-practice
+python -m pip install -e ".[dev]"
+pytest
+python -m tool_loop.demo
+```
+
+先读项目 README 的六层结构，再按 `runtime.py → registry.py → tools.py → guards.py → tests` 的顺序阅读代码。

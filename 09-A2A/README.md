@@ -4,6 +4,17 @@
 
 详细学习：[A2A 概念、最小实验与 MCP 对比](./01-A2A最小实验.md)。
 
+配套工程：[a2a-practice](./a2a-practice/README.md)。工程先实现包含幂等、运行、取消和事件游标的私有 HTTP 契约，再用官方 A2A SDK 1.x 实现 Agent Card、Message、Task、Artifact、AgentExecutor 与 HTTP+JSON/REST 委托，并比较协议 Task 与业务执行账本的差异。
+
+快速开始：
+
+```powershell
+cd 09-A2A/a2a-practice
+python -m pip install -e ".[dev]"
+python -m a2a_lab.demo
+python -m pytest -q
+```
+
 ## 零基础前置
 
 必须先能讲清 Client/Server、HTTP、Agent 与 MCP。A2A 是 P2，不理解网络协议细节也可以先学概念；只需画清楚两个独立 Agent 谁调用谁、任务状态由谁保存。

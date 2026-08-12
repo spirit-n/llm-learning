@@ -6,6 +6,18 @@
 
 微软完整课程导读：[Microsoft MCP for Beginners 的 Python 学习路线](./02-微软MCP教程导读.md)。
 
+配套工程：[mcp-practice](./mcp-practice/README.md)。工程用 FastMCP 实现 Tool、Resource、Resource Template、Prompt、stdio 客户端和 Streamable HTTP；Host 侧补充能力 allowlist、可信身份参数注入、scope、schema 预检和错误分类，服务侧用 SQL AST Guard、幂等冲突检测与脱敏审计覆盖主要攻击/误用场景。
+
+快速开始：
+
+```powershell
+cd 08-MCP/mcp-practice
+python -m pip install -e ".[dev]"
+python -m mcp_lab.demo
+python -m mcp_lab.client
+python -m pytest -q
+```
+
 ## 零基础前置
 
 先看 [基础术语表](../00-学习规划/基础术语表.md) 中 Client/Server、HTTP、JSON、API 和 Tool。会写一个 Python 函数并理解参数/返回值即可开始；数据库与认证可在最小 Server 跑通后再补。

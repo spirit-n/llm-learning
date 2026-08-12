@@ -7,6 +7,8 @@
 - [从零搭建 RAG 的每一步](./01-从零搭建RAG.md)
 - [RAG 实验、指标与失败分析](./02-RAG实验手册.md)
 
+配套代码：[RAG 检索练习](./rag-practice/README.md)。默认演示实现标题/长段 overlap 切分、教学用 dense、BM25、RRF、rerank、召回前权限/版本/source 过滤、阶段 Trace、Context 注入标记与预算、引用校验和标签切片评测，无需 API Key；显式运行 `tests_live/` 时才调用配置的真实模型。
+
 微软教程补充：先按 [LangChain 导读](../05-LangChain/02-微软LangChain教程导读.md) 学文档、Embedding、语义检索，再按 [AI Agents 导读](../06-LangGraph/02-微软AI-Agents教程导读.md) 学 Agentic RAG；固定 RAG 基线没有评测前，不做 Agentic RAG。
 
 ## 零基础前置

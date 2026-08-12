@@ -4,6 +4,17 @@
 
 详细学习：[从 20 条样本建立第一个 Eval Harness](./01-Eval-Harness实操.md)。
 
+配套工程：[eval-observability-practice](./eval-observability-practice/README.md)。它包含 20 条带证据约束的 JSONL golden set、数据集指纹、oracle 隔离输入、三个有版本号的确定性候选、严格 trace 身份/结构校验、工具执行状态与参数策略、完整 Span 图检查、Runner 实测 P50/P95、递归脱敏 artifact、tag/Wilson 切片、case/tag 级回归门，并提供带关键事实负例的严格 Pydantic LLM Judge live 测试。
+
+快速开始：
+
+```powershell
+cd 13-评测与可观测性/eval-observability-practice
+python -m pip install -e ".[dev,live]"
+python -m eval_lab.demo
+python -m pytest -q
+```
+
 ## 零基础前置
 
 数学只需比例、平均值和排序。先理解“固定 20 道题，每次改系统后重新考试”，再学习 precision/recall 和自动指标。不会写评测框架时可以先用表格人工打 0/1 分。

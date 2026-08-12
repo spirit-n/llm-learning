@@ -64,6 +64,15 @@ Inspector 通过后再写自动化测试；图形界面不是测试替代品，�
 
 每层都要单测。模型、MCP Client 或 Server 中任何一层被绕过时，数据库只读账户仍是最后防线。
 
+配套工程把 Host 和 Server 的职责进一步拆开：`host.py` 只接受模型生成的业务参数，并从可信 `Principal` 注入 `tenant/request_id`；`server.py` 只负责协议注册；`service.py` 执行权限、幂等、Guard 和审计。不要把租户字段直接交给模型填写，也不要只因为 SDK 完成了 schema 校验就跳过业务授权。
+
+运行边界测试：
+
+```powershell
+cd 08-MCP/mcp-practice
+python -m pytest -q tests/test_host_boundary.py tests/test_query_service.py
+```
+
 ## 6. 观测字段
 
 记录 request/trace ID、server/tool/version、授权主体、参数摘要、耗时、结果行数、状态和错误码。不记录明文凭证；敏感 SQL/结果按策略脱敏。

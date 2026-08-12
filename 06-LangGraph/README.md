@@ -6,6 +6,17 @@
 
 框架无关的 Agent 设计补充：[Microsoft AI Agents for Beginners 中文导读](./02-微软AI-Agents教程导读.md)。
 
+配套工程：[langgraph-practice](./langgraph-practice/README.md)。默认流程用离线、确定性的 SQL 问答演示 StateGraph/reducer、条件路由、checkpoint、stream、interrupt/resume、错误分类、有限重试、幂等和结果验证；`tests_live/` 再把真实模型接到 SQL 生成节点前。
+
+快速开始：
+
+```powershell
+cd 06-LangGraph/langgraph-practice
+python -m pip install -e ".[dev]"
+python -m lg_lab.demo
+python -m pytest -q
+```
+
 ## 零基础前置
 
 先理解 Function Calling 和 LangChain 的 Tool；Python 方面会 dict、函数、`if/else` 和类型标注即可。把 State 想成“任务档案袋”、Node 想成“处理档案的一道工序”、Edge 想成“下一站指示牌”，再进入代码。
@@ -20,10 +31,12 @@
 ## 项目图
 
 ```text
-classify → retrieve_schema → generate_sql → sql_guard
-                                      ↘ reject/human_review
-sql_guard → execute → verify ──失败──→ repair（最多 2 次）
-                    └─成功──────────→ answer → eval
+validate → classify → retrieve_schema → generate_sql → sql_guard
+                                                   ├─ reject → answer
+                                                   └─ human_review → execute
+execute ──瞬时失败且有预算──→ execute
+        ├─失败/耗尽────────→ answer
+        └─成功────────────→ verify → answer
 ```
 
 ## 必做

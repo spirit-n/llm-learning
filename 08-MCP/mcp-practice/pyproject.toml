@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "secure-mcp-practice"
+version = "0.2.0"
+description = "Offline secure MCP host, protocol-boundary and server practice"
+requires-python = ">=3.12"
+dependencies = [
+  "mcp>=1.29,<2",
+  "sqlglot>=30.13,<31",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "pytest-asyncio>=1,<2"]
+live = ["httpx>=0.28,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+asyncio_mode = "auto"
+markers = ["live: calls a real model endpoint and may incur cost"]

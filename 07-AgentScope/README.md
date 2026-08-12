@@ -4,6 +4,17 @@
 
 详细学习：[AgentScope 安装、概念与对照实验](./01-AgentScope入门实操.md)。
 
+配套工程：[agentscope-practice](./agentscope-practice/README.md)。它使用当前 AgentScope 2.0.4 的 Message、Agent、Tool、Toolkit 和 ReAct 配置；默认离线演示专家路由、无工具权限的审核 Agent、显式消息流、超时与失败隔离，`tests_live/` 验证真实模型工具循环。
+
+快速开始：
+
+```powershell
+cd 07-AgentScope/agentscope-practice
+python -m pip install -e ".[dev]"
+python -m as_lab.demo
+python -m pytest -q
+```
+
 框架无关的 Agent 设计模式可结合 [微软 AI Agents 教程导读](../06-LangGraph/02-微软AI-Agents教程导读.md)，再用 AgentScope 完成单/多 Agent 对照。
 
 ## 零基础前置
@@ -14,7 +25,7 @@
 
 ## 必学内容（P1）
 
-- 安装、message、model、prompt formatter、tool、ReAct Agent。
+- 安装、message、model、tool，以及当前统一 `Agent` 中由 `ReActConfig` 控制的推理—行动循环。
 - 一个 routing/handoff 示例，并观察消息和工具结果怎样流动。
 - 与 LangGraph 比较抽象中心、显式控制流和状态恢复方式。
 

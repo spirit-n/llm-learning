@@ -6,6 +6,17 @@
 
 补充教材：微软 AI Agents 课程的 Context 与 Memory 章节已映射在 [中文导读](../06-LangGraph/02-微软AI-Agents教程导读.md)。
 
+配套工程：[context-builder-practice](./context-builder-practice/README.md)。工程以纯 Python 实现必需且可审计的任务段、权限/时效前置过滤、显式来源权威链、确定性去重与冲突处理、不可信数据 JSON 隔离、整体/分层 token 预算、压缩损失诊断和 manifest v3，并覆盖四类 Context 失败。离线实验不依赖模型。
+
+快速开始：
+
+```powershell
+cd 10-Context-Engineering/context-builder-practice
+python -m pip install -e ".[dev]"
+python -m context_lab.demo
+python -m pytest -q
+```
+
 ## 零基础前置
 
 先理解 token、Prompt、RAG、Tool 和聊天历史。可以把 Context 想成“开卷考试时放在桌面的所有材料”，Context Engineering 就是决定带哪些材料、按什么顺序摆放、哪些材料不能带。
@@ -32,12 +43,17 @@
 5. 按 token 预算分配各层，超限时使用明确的丢弃/压缩策略。
 6. 记录最终 context manifest，便于复现与审计。
 
+注意：来源优先级不能和文档版本混为一谈。一个未经验证网页的 `v99` 不应覆盖权威指标目录的 `v2`；有过期规则的来源还必须携带可回放的 `as_of`，不能在 Builder 内部偷偷读取当前时间。
+
 ## 必做实验
 
 - schema 全量输入 vs 按问题检索。
 - 全历史 vs 滑动窗口 vs 状态摘要。
 - 工具原始输出 vs 结构化摘要 + 原始结果引用。
 - 冲突文档中加入时间、版本和可信级别后比较回答。
+- 只有整体预算 vs 为 retrieved/tool/domain 设置分层预算，观察长检索材料是否挤掉工具证据。
+
+配套工程的 `run_all_experiments()` 会统一报告 token、included IDs、drop reasons 和裁剪 token 数，避免只凭一段回答的观感下结论。
 
 ## 面试追问
 

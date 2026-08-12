@@ -36,6 +36,19 @@
 2. 给上下文混入一条冲突信息，观察模型是否遵循来源优先级。
 3. 将 prompt 从 2,000 token 压缩到 800 token，比较准确率、延迟和成本。
 
+## 运行实验前的模型配置
+
+四个 Prompt notebook 与后续工程共用 [真实模型统一配置](../shared/README.md)，代码不内置 provider、端点、模型名或 key。至少显式设置：
+
+```powershell
+$env:LLM_BASE_URL = "https://provider.example.com/v1"
+$env:LLM_MODEL = "provider-model-name"
+$env:LLM_API_KEY_ENV = "PROVIDER_API_KEY"
+$env:PROVIDER_API_KEY = "你的密钥"
+```
+
+也可以直接设置 `LLM_API_KEY`，或者用完整的 `LLM_CHAT_COMPLETIONS_URL` 代替 `LLM_BASE_URL`。缺少任一必要配置时，notebook 会在第一段代码直接报错，不会发送请求。
+
 ## 不要浪费时间
 
 - 背“万能提示词”。

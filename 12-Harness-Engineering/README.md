@@ -4,6 +4,17 @@
 
 详细学习：[用故障场景设计 Agent Harness](./01-Harness设计实操.md)。
 
+配套工程：[harness-practice](./harness-practice/README.md)。它用默认离线、可故障注入的 Planner 和工具实现 TaskSpec、完整上下文预算、allowlist、权限与租户隔离、覆盖审批/工具/Verifier 的总 deadline、取消、审批契约、幂等状态机、按尝试计费、timeout/有限重试、输出限流、确定性 Verifier 与脱敏 Trace，并提供真实模型 Planner 的显式 live 测试。
+
+快速开始：
+
+```powershell
+cd 12-Harness-Engineering/harness-practice
+python -m pip install -e ".[dev,live]"
+python -m harness_lab.demo
+python -m pytest -q
+```
+
 补充教材：微软 AI Agents 课程中的 Trustworthy、Production、Security 章节见 [中文导读](../06-LangGraph/02-微软AI-Agents教程导读.md)。
 
 ## 零基础前置
@@ -26,7 +37,7 @@ State/Memory ← Observation/Trace
 Verifier → Retry/Recovery → Human Review → Result
 ```
 
-- Task Spec：完成条件、预算、截止时间、允许动作。
+- Task Spec：完成条件（如 `expected_metric`）、预算、截止时间、允许动作。
 - Context Builder：按需收集并裁剪上下文。
 - Tool Registry：schema、版本、权限、成本和副作用元数据。
 - Guard/Executor：校验、沙箱、超时、幂等和审计。
@@ -45,7 +56,7 @@ Verifier → Retry/Recovery → Human Review → Result
 
 ## 项目验收
 
-用指标查询 Agent 演练：模型超时、SQL 语法错、权限拒绝、结果为空、结果异常、工具断连、上下文超限、人工拒绝。每种故障都应有可预测状态、trace 和最终退出路径。
+用指标查询 Agent 演练：模型/审批/Verifier 超时或错误协议、跨租户参数、权限拒绝、结果为空/缺字段/异常、工具断连、累计上下文/成本/输出超限、用户取消、人工拒绝，以及副作用执行中、结果未知、完成重放和幂等冲突。每种故障都应有可预测状态、trace 和最终退出路径。
 
 ## 面试定义
 

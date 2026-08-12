@@ -1,0 +1,4 @@
+interface:
+  display_name: "ClickHouse SQL Review"
+  short_description: "Review ClickHouse SQL safely before execution"
+  default_prompt: "Use $clickhouse-sql-review to review this analytics SQL before execution."

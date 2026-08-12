@@ -6,6 +6,17 @@
 
 微软课程导读：[Microsoft LangChain for Beginners 中文学习路线](./02-微软LangChain教程导读.md)。
 
+配套工程：[langchain-practice](./langchain-practice/README.md)。默认测试可完全离线运行，覆盖当前的 Messages、Prompt、结构化输出、Tool、Agent、Retriever、Runnable 和 Streaming API，并补上 tenant/role、工具预算、递归上限、结构化失败和审计事件；`tests_live/` 用于真实模型验证。
+
+快速开始：
+
+```powershell
+cd 05-LangChain/langchain-practice
+python -m pip install -e ".[dev]"
+python -m lc_lab.demo
+python -m pytest -q
+```
+
 ## 零基础前置
 
 必须先手写过一次普通模型请求或 fake tool loop，否则框架抽象会显得像魔法。需要会 Python 函数、装包、import、异常和 Pydantic；类只需看懂构造与方法，不要求精通面向对象。

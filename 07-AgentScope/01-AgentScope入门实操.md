@@ -39,6 +39,16 @@ python -c "import agentscope; print('AgentScope import OK')"
 
 比较 30 条样本的 execution accuracy、安全违规率、平均模型调用次数、token、延迟和失败定位时间。Review Agent 不能替代确定性 Guard。
 
+配套工程已把阶段 B 拆成 `metric/knowledge specialist → review agent` 两段，并由普通 Python Coordinator 控制超时、消息长度和 handoff 次数。学习时先运行：
+
+```powershell
+cd 07-AgentScope/agentscope-practice
+python -m as_lab.demo
+python -m pytest -q tests/test_multi_agent_workflow.py
+```
+
+重点不是背 AgentScope API，而是观察三种边界：Agent 间只传完成任务所需的消息；审核者没有业务工具权限；任一 Agent 超时或返回错误协议时，请求有限失败而不是继续自由对话。
+
 ## 5. 常见误区
 
 - 角色多不等于能力强；角色上下文会增加成本和信息丢失。
