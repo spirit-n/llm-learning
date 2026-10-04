@@ -1,5 +1,7 @@
 # 14｜Transformer 与微调
 
+2026-10 新增：[training-data-practice](./training-data-practice/README.md)。不用 GPU、不下载模型，先检查工具调用样本、chat template、assistant-only loss mask、EOS 与 padding；后续才在单独训练环境做真实 TRL/PEFT 实验。这一步不需要租计算卡，也不改变模型 API 配置。
+
 **安排：** 第 3～4 周各穿插 60～90 分钟概念卡，第 8 周用 2 天整理面试表达，P2。目标是理解应用选型并能讲清，不做从零训练。
 
 详细学习：

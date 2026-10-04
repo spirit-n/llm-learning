@@ -1,5 +1,21 @@
 # Agent Harness 故障与恢复练习
 
+## 2026-10：持久化恢复与用量边界
+
+```powershell
+New-Item -ItemType Directory -Force artifacts | Out-Null
+python -m harness_lab.persistence --db artifacts/workflow.sqlite --job lesson-1
+python -m harness_lab.persistence --db artifacts/workflow.sqlite --job lesson-1
+python -m harness_lab.persistence --db artifacts/workflow.sqlite --job lesson-1
+python -m pytest tests/test_persistence.py -q
+```
+
+三次独立进程依次得到 report_created、completed、completed/replayed，报告只插入一次，预算不会因重启归零。阅读 `persistence.py` → `idempotency.py` → `runtime.py` → `tests/test_persistence.py`。`SQLiteIdempotencyStore` 可注入现有 runtime；并发 reserve 只有一个执行者，崩溃留下的 in_progress/unknown 不会自动重做。
+
+这里把本地报告和进度放在同一个 SQLite 事务；外部退款、邮件等不共享这个事务，仍需下游幂等与对账。线程 timeout 不能强杀工具，这一限制仍成立。上述持久化报告实验是独立的两步工作流，不宣称已把任意 Agent 消息栈自动存盘恢复。
+
+`usage.receipt_from_result` 可接收共享 `chat_result()` 的结果（Protocol，无共享模块强依赖），记录供应商用量和尝试次数。教学 cost_units 不是真实 token 或美元；缺失 usage/价格表不可当作免费。真实 token 只来自返回 usage，费用还需带日期的价格与计费规则；本轮没有调用模型。
+
 这个工程把模型外的可靠性机制写成一个小型、可单测的运行时。它不假设模型会“自觉守规矩”，而是在模型调用前后设置强制边界：
 
 ```text

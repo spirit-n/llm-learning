@@ -18,6 +18,8 @@ from shared.live_llm import (  # noqa: E402
 )
 
 
+from shared.llm_support import JsonlEventSink  # noqa: E402
+
 pytestmark = pytest.mark.live
 
 
@@ -91,10 +93,13 @@ def _to_provider_messages(messages: list[Message]) -> list[dict]:
 
 def test_live_model_runs_inside_the_guarded_tool_runtime():
     settings = LiveLLMSettings.from_env()
+    log_path = Path(__file__).resolve().parents[1] / "artifacts" / "live_requests.jsonl"
+    client = OpenAICompatibleChatClient(settings, event_sink=JsonlEventSink(log_path))
+    print(f"调用元数据日志：{log_path}")
 
     runtime = ToolRuntime(build_default_registry(), max_steps=4)
     result = runtime.run(
-        LiveToolCallingModel(OpenAICompatibleChatClient(settings)),
+        LiveToolCallingModel(client),
         "必须调用 get_metric_definition 工具查询‘营业收入’的正式口径，再根据工具结果回答。",
         UserContext(user_id="live-student", permissions=frozenset({"metrics:read"})),
     )

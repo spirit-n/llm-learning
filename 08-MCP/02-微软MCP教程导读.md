@@ -5,13 +5,13 @@
 
 这套教程同时提供 .NET、Java、TypeScript/JavaScript、Rust 和 Python 示例。你有 Java 背景，但 8 周求职主线仍只运行 Python；Java 示例只用于比较 Spring AI/类型系统，不要同时维护两套实现。
 
-## 版本提示（截至 2026-07-11）
+## 版本提示（2026-10-04 更新）
 
-仓库当前说明课程主线对齐 MCP Specification `2025-11-25` 稳定版本，同时包含计划于 `2026-07-28` 发布的候选版本变化说明。当前日期早于该候选版本计划日期，所以：
+早期笔记将 `2026-07-28` 记作候选规范；该日期已过去，不能再用“尚未发布”描述。新版已发生协议和 SDK 层面的破坏性变化，见 [版本迁移边界](./03-2026协议迁移边界.md)。本仓库主动保留旧版练习基线：
 
-- 项目实现与面试主线使用当前稳定规范。
-- `2026-07-28 RC` 章节只作为 P3 技术雷达。
-- 以后学习时重新查看仓库与官方规范，不把这份日期说明永久当真。
+- 当前工程使用 Python SDK 1.x / 2025 协议流程，安装保留 `<2`。
+- 2026-07-28 新协议先理解差异；需要迁移时在独立环境完成互操作测试。
+- 外部教程可能已切到 v2；不要将其最新代码直接拷进 v1 练习。
 
 ## Python 环境
 
@@ -20,7 +20,7 @@
 ```powershell
 conda create -n ms-mcp-course python=3.11 -y
 conda activate ms-mcp-course
-python -m pip install "mcp[cli]"
+python -m pip install "mcp[cli]>=1.29,<2"
 python -c "import mcp; print('MCP SDK OK')"
 ```
 

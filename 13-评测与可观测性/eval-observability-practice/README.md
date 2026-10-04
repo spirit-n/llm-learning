@@ -1,5 +1,22 @@
 # Eval Harness 与 Trace 练习
 
+## 2026-10：多工具轨迹与 OpenTelemetry
+
+`EvalCase.required_tools` 定义必需工具与参数，`required_order` 定义必要先后关系，`allow_retries/max_retry_attempts/retryable_error_codes` 控制允许的恢复。无顺序依赖的工具可以交换；鉴权错误后重试、重复成功调用、禁止工具或参数越界仍失败。当前每个工具名只允许一项期望，不是任意 DAG/任意多次调用评测器。
+
+```powershell
+python -m pytest tests/test_multi_tool.py -q
+# 选修观测适配时，在独立环境安装：
+python -m pip install -e ".[dev,otel]"
+python -m pytest tests/test_otel_adapter.py -q
+```
+
+`otel_adapter.py` 是真实 OpenTelemetry SDK 适配：可传播 W3C trace context（不自动传播 baggage），异常只记类型，不自动记录堆栈/正文。测试用内存 exporter 验证跨线程父子关系、错误与脱敏，不连 Collector。`make_otlp_adapter(endpoint)` 只有显式调用才启用 OTLP HTTP exporter；上线需自行配置可信 Collector、TLS/认证、采样及保留期，最后调用 `close()` flush/shutdown。
+
+GenAI 语义约定仍标为 Development，本地映射带 `eval-lab/genai-development/2026-10-04-v1` 标识，不保证字段永久稳定。来源：[GenAI span conventions](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-spans.md)。元数据记录优先于业务原文；正则脱敏不可能识别所有 PII，切勿将敏感正文当普通 span 属性。
+
+阅读顺序：`models.py` → `evaluators.py` → `test_multi_tool.py` → `otel_adapter.py` → `test_otel_adapter.py`。答案关键词/引用 ID/轨迹合格仍不自动证明语义正确，应结合 04 章的事实支持性评审和人工标注。
+
 这个工程使用 20 条固定 golden set，对同一个指标 Agent 的 `baseline`、`candidate` 和故意损坏的 `broken` 版本做离线评测：
 
 ```text

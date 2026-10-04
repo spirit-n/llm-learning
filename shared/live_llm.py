@@ -6,12 +6,20 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
+import time
 from dataclasses import dataclass, field
-from typing import Any, Mapping, Sequence
+from typing import Any, Callable, Mapping, Sequence
+from urllib.parse import urlsplit, urlunsplit
 
 import httpx
+
+from shared.llm_support import (
+    ChatResult, JSONTransport, LiveLLMRequestError, ModelCapabilities, RetryPolicy,
+    normalize_usage, redact, safe_identifier,
+)
 
 
 CHAT_COMPLETIONS_SUFFIX = "/chat/completions"
@@ -29,7 +37,7 @@ class LiveLLMSettings:
     timeout_seconds: float = 60.0
     temperature: float = 0.0
     max_tokens: int = 512
-    extra_headers: Mapping[str, str] = field(default_factory=dict)
+    extra_headers: Mapping[str, str] = field(default_factory=dict, repr=False)
 
     @classmethod
     def from_env(cls) -> "LiveLLMSettings":
@@ -70,7 +78,14 @@ class LiveLLMSettings:
 
     def safe_summary(self) -> str:
         """可安全打印的连接摘要，刻意不包含 API Key。"""
-        return f"endpoint={self.endpoint}, model={self.model}, timeout={self.timeout_seconds}s"
+        url = urlsplit(self.endpoint)
+        # 自定义网关 URL 也可能含 userinfo、query 凭据，不回显它们。
+        host = url.netloc.rsplit("@", 1)[-1]
+        endpoint = urlunsplit((url.scheme, host, url.path, "", ""))
+        return redact(
+            f"endpoint={endpoint}, model={self.model}, timeout={self.timeout_seconds}s",
+            (self.api_key, *self.extra_headers.values()),
+        )
 
     @property
     def base_url(self) -> str:
@@ -83,8 +98,20 @@ class LiveLLMSettings:
 
 
 class OpenAICompatibleChatClient:
-    def __init__(self, settings: LiveLLMSettings):
+    def __init__(
+        self, settings: LiveLLMSettings, *, capabilities: ModelCapabilities | None = None,
+        retry_policy: RetryPolicy | None = None, transport: httpx.BaseTransport | None = None,
+        event_sink: Callable[[Mapping[str, Any]], None] | None = None,
+        sleep: Callable[[float], None] = time.sleep,
+        clock: Callable[[], float] = time.monotonic,
+    ):
         self.settings = settings
+        self.capabilities = capabilities or ModelCapabilities()
+        self._http = JSONTransport(
+            endpoint=settings.endpoint, api_key=settings.api_key,
+            timeout_seconds=settings.timeout_seconds, extra_headers=settings.extra_headers,
+            policy=retry_policy, transport=transport, event_sink=event_sink, sleep=sleep, clock=clock,
+        )
 
     def chat(
         self,
@@ -96,12 +123,32 @@ class OpenAICompatibleChatClient:
         max_tokens: int | None = None,
         temperature: float | None = None,
     ) -> dict[str, Any]:
+        """兼容旧章节：仍只返回 message；需要用量时使用 chat_result()。"""
+        return self.chat_result(
+            messages, tools=tools, tool_choice=tool_choice, response_format=response_format,
+            max_tokens=max_tokens, temperature=temperature,
+        ).message
+
+    def chat_result(
+        self, messages: Sequence[Mapping[str, Any]], *,
+        tools: Sequence[Mapping[str, Any]] | None = None,
+        tool_choice: str | Mapping[str, Any] | None = None,
+        response_format: Mapping[str, Any] | None = None,
+        max_tokens: int | None = None, temperature: float | None = None,
+    ) -> ChatResult:
+        if (tools is not None or tool_choice is not None) and not self.capabilities.supports_tools:
+            raise ValueError("当前能力配置不支持工具调用")
+        if response_format and response_format.get("type") == "json_schema" and not self.capabilities.supports_json_schema:
+            raise ValueError("当前能力配置不支持原生 JSON Schema 输出")
+        if temperature is not None and not self.capabilities.supports_temperature:
+            raise ValueError("当前能力配置不支持 temperature")
         payload: dict[str, Any] = {
             "model": self.settings.model,
             "messages": list(messages),
-            "temperature": self.settings.temperature if temperature is None else temperature,
-            "max_tokens": self.settings.max_tokens if max_tokens is None else max_tokens,
+            self.capabilities.max_tokens_parameter: self.settings.max_tokens if max_tokens is None else max_tokens,
         }
+        if self.capabilities.supports_temperature:
+            payload["temperature"] = self.settings.temperature if temperature is None else temperature
         if tools is not None:
             payload["tools"] = list(tools)
         if tool_choice is not None:
@@ -109,29 +156,23 @@ class OpenAICompatibleChatClient:
         if response_format is not None:
             payload["response_format"] = dict(response_format)
 
-        headers = {
-            "Authorization": f"Bearer {self.settings.api_key}",
-            "Content-Type": "application/json",
-            **self.settings.extra_headers,
-        }
+        body, latency, attempts, request_id = self._http.post(payload, api_style="chat_completions")
         try:
-            with httpx.Client(timeout=self.settings.timeout_seconds) as client:
-                response = client.post(self.settings.endpoint, headers=headers, json=payload)
-                response.raise_for_status()
-                body = response.json()
-        except httpx.HTTPStatusError as exc:
-            detail = _safe_error_body(exc.response)
-            raise RuntimeError(f"模型接口返回 HTTP {exc.response.status_code}: {detail}") from exc
-        except (httpx.HTTPError, ValueError) as exc:
-            raise RuntimeError(f"模型请求失败（{self.settings.safe_summary()}）：{exc}") from exc
-
-        try:
-            message = body["choices"][0]["message"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise RuntimeError(f"模型响应缺少 choices[0].message：{_compact_json(body)}") from exc
-        if not isinstance(message, dict):
-            raise RuntimeError("choices[0].message 不是 JSON 对象")
-        return message
+            choice = body["choices"][0]
+            message = choice["message"]
+            if not isinstance(message, dict):
+                raise TypeError("invalid message")
+        except (KeyError, IndexError, TypeError):
+            self._http.emit({"event": "request_failed", "api_style": "chat_completions", "attempt": attempts, "error_code": "INVALID_RESPONSE"})
+            raise LiveLLMRequestError("INVALID_RESPONSE", attempts=attempts) from None
+        result = ChatResult(
+            message=message, usage=normalize_usage(body.get("usage")),
+            model=safe_identifier(body.get("model")), response_id=safe_identifier(body.get("id")),
+            finish_reason=safe_identifier(choice.get("finish_reason")), latency_seconds=latency,
+            attempts=attempts, request_id=safe_identifier(request_id),
+        )
+        self._http.emit({"event": "request_completed", "api_style": "chat_completions", **result.metadata()})
+        return result
 
 
 def parse_json_content(message_or_content: Mapping[str, Any] | str) -> Any:
@@ -165,7 +206,7 @@ def _chat_completions_url(base_url: str) -> str:
 
 def _positive_float(name: str, default: float) -> float:
     value = float(os.getenv(name, str(default)))
-    if value <= 0:
+    if not math.isfinite(value) or value <= 0:
         raise ValueError(f"{name} 必须大于 0")
     return value
 
@@ -175,13 +216,3 @@ def _positive_int(name: str, default: int) -> int:
     if value <= 0:
         raise ValueError(f"{name} 必须大于 0")
     return value
-
-
-def _safe_error_body(response: httpx.Response) -> str:
-    text = response.text[:800]
-    auth = response.request.headers.get("Authorization", "")
-    return text.replace(auth, "[REDACTED]") if auth else text
-
-
-def _compact_json(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=False, separators=(",", ":"))[:800]

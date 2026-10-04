@@ -12,6 +12,7 @@ from skill_lab.catalog import (
     load_instructions,
     should_activate,
     validate_skill_package,
+    validate_standard_format,
 )
 
 
@@ -44,6 +45,18 @@ def test_bad_skill_is_isolated_without_hiding_valid_skill(tmp_path):
     assert snapshot.issues[0].code == "INVALID_SKILL"
 
 
+@pytest.mark.parametrize("profile", ["strict", "standard"])
+def test_non_string_frontmatter_keys_do_not_crash_discovery(tmp_path, profile):
+    make_skill(tmp_path, "valid-skill")
+    bad = make_skill(tmp_path, "bad-skill")
+    path = bad / "SKILL.md"
+    path.write_text(path.read_text(encoding="utf-8").replace("description:", "7: invalid\nextra: invalid\ndescription:"), encoding="utf-8")
+    snapshot = discover_skills(tmp_path, profile=profile)
+    assert [skill.name for skill in snapshot.skills] == ["valid-skill"]
+    assert snapshot.issues[0].code == "INVALID_SKILL"
+    assert not validate_skill_package(bad, profile=profile).valid
+
+
 @pytest.mark.parametrize("extra_field", ["version: 1", "metadata: {}", "license: MIT"])
 def test_frontmatter_rejects_fields_outside_name_and_description(tmp_path, extra_field):
     skill = make_skill(tmp_path, "strict-skill")
@@ -57,6 +70,82 @@ def test_frontmatter_rejects_fields_outside_name_and_description(tmp_path, extra
     report = validate_skill_package(skill)
     assert report.valid is False
     assert report.issues[0].code == "INVALID_SKILL"
+
+
+def test_standard_optional_metadata_is_preserved_but_default_strict_remains(tmp_path):
+    skill = make_skill(tmp_path, "portable-skill")
+    path = skill / "SKILL.md"
+    path.write_text(path.read_text(encoding="utf-8").replace(
+        "description:",
+        'license: MIT\ncompatibility: Requires Python 3.12\n'
+        'metadata:\n  author: Example\n  version: "1.0"\n'
+        'allowed-tools: Read\ndescription:',
+    ), encoding="utf-8")
+    metadata = discover_skill(skill, profile="standard")
+    assert metadata.license == "MIT"
+    assert metadata.compatibility == "Requires Python 3.12"
+    assert dict(metadata.metadata) == {"author": "Example", "version": "1.0"}
+    assert metadata.allowed_tools == "Read"
+    assert validate_standard_format(skill).valid
+    assert validate_skill_package(skill, profile="standard").valid
+    assert not validate_skill_package(skill).valid
+    assert len(discover_skills(tmp_path, profile="standard").skills) == 1
+    assert SkillCatalog.from_root(tmp_path, profile="standard").metadata("portable-skill") == metadata
+
+
+@pytest.mark.parametrize("field", [
+    "version: 1", "metadata: []", "metadata: {version: 1}",
+    "metadata: {true: value}", "license: true", "allowed-tools: [Read]",
+    "compatibility: " + "x" * 501,
+])
+def test_standard_frontmatter_types_and_unknown_fields_are_rejected(tmp_path, field):
+    skill = make_skill(tmp_path, "invalid-standard")
+    path = skill / "SKILL.md"
+    path.write_text(path.read_text(encoding="utf-8").replace(
+        "description:", field + "\ndescription:",
+    ), encoding="utf-8")
+    assert not validate_standard_format(skill).valid
+
+
+def test_standard_allows_extra_directories_without_changing_loader_permissions(tmp_path):
+    skill = make_skill(tmp_path, "portable-skill", body="[Example](examples/use.md)\n")
+    (skill / "examples").mkdir()
+    (skill / "examples" / "use.md").write_text("Example.", encoding="utf-8")
+    report = validate_standard_format(skill)
+    assert report.valid
+    assert "examples/use.md" in report.checked_resources
+    assert not validate_skill_package(skill).valid
+    loader = SkillLoader(SkillCatalog.from_root(tmp_path, profile="standard"))
+    loader.load_instructions("portable-skill")
+    with pytest.raises(UnsafeSkillPath):
+        loader.load_reference("portable-skill", "examples/use.md")
+
+
+@pytest.mark.parametrize("target", ["../outside.md", "/etc/passwd", "C:/Windows/win.ini"])
+def test_standard_format_still_rejects_unsafe_resource_links(tmp_path, target):
+    skill = make_skill(tmp_path, "unsafe-link", body=f"[resource]({target})\n")
+    report = validate_standard_format(skill)
+    assert not report.valid
+    assert "BROKEN_OR_UNSAFE_LINK" in {issue.code for issue in report.issues}
+
+
+def test_standard_does_not_impose_host_specific_ui_contract(tmp_path):
+    skill = make_skill(tmp_path, "other-host")
+    (skill / "agents").mkdir()
+    (skill / "agents" / "openai.yaml").write_text("other_host: value\n", encoding="utf-8")
+    assert validate_standard_format(skill).valid
+    assert not validate_skill_package(skill).valid
+
+
+def test_profile_typo_fails_closed(tmp_path):
+    skill = make_skill(tmp_path, "valid-skill")
+    with pytest.raises(ValueError, match="profile"):
+        validate_skill_package(skill, profile="standrad")
+
+
+def test_standard_name_maximum_length(tmp_path):
+    skill = make_skill(tmp_path, "a" * 65)
+    assert not validate_standard_format(skill).valid
 
 
 @pytest.mark.parametrize(
@@ -248,5 +337,7 @@ def test_symlinked_reference_is_rejected_when_platform_allows_it(skill_dir, tmp_
         # 临时 SKILL 不链接此文件，但包校验仍应发现供应链风险。
         report = validate_skill_package(skill_dir)
         assert any(issue.code == "SYMLINK_RESOURCE" for issue in report.issues)
+        standard = validate_standard_format(skill_dir)
+        assert any(issue.code == "SYMLINK_RESOURCE" for issue in standard.issues)
     finally:
         link.unlink()

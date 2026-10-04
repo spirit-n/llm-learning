@@ -2,11 +2,11 @@
 
 ## 1. 安装前
 
-AgentScope 当前要求和 API 以 [官方文档](https://doc.agentscope.io/) 为准。先创建独立环境或在项目环境锁版本：
+AgentScope 2.x 要求和 API 以 [官方文档](https://docs.agentscope.io/) 为准。本工程的验证基线是 `2.0.4.post1`，不是“当前最新版”；先使用已验证版本，再在独立环境试升级：
 
 ```powershell
 conda activate llm-learning
-python -m pip install -U agentscope
+python -m pip install "agentscope==2.0.4.post1"
 python -c "import agentscope; print('AgentScope import OK')"
 ```
 

@@ -1,5 +1,7 @@
 # 11｜Agent Skills
 
+2026-10 补充：[工程 README](./skill-practice/README.md#2026-10通用格式与本地严格策略) 明确标准格式与本地安全 profile 的区别。默认 strict 不放宽；标准允许的可选 metadata 不应被说成“所有 Skill 都禁止”。
+
 **安排：** 第 5 周后半天，P1。
 
 详细学习：[从零制作 SQL Review Skill](./01-SQL-Review-Skill实操.md)。
@@ -62,7 +64,7 @@ clickhouse-sql-review/
 
 | 优先级 | 资料 | 它是干什么的 | 零基础怎么使用 |
 |---|---|---|---|
-| P0 | [Agent Skills Specification](https://openagentskills.dev/docs/specification) | 定义 Skill 文件夹、`SKILL.md`、YAML frontmatter、name/description 和可选目录的正式格式 | 先只读目录结构、必填 frontmatter 和命名规则，然后创建最小 Skill；高级 metadata 等真正需要时再查 |
+| P0 | [Agent Skills Specification](https://agentskills.io/specification) | 定义 Skill 文件夹、`SKILL.md`、YAML frontmatter、name/description 和可选目录的正式格式 | 先只读目录结构、必填 frontmatter 和命名规则，然后创建最小 Skill；高级 metadata 等真正需要时再查 |
 | P1 | [NVIDIA Skills 示例](https://github.com/NVIDIA/skills) | NVIDIA 发布的真实 Skills，可观察企业如何组织指令、references 和 scripts | 先挑一个与你熟悉任务相近的 Skill，看 description 如何写触发条件；不要一次复制整个仓库，也要审查脚本副作用 |
 
 阅读示例的目的不是模仿文字长度，而是看清三件事：何时触发、按什么步骤做、怎样验证结果。

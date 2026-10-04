@@ -67,4 +67,6 @@ python -m tool_loop.demo
 
 ## 真实模型实验
 
+2026-10-04 补充：显式运行 live 测试后，请求元数据追加到 `artifacts/live_requests.jsonl`（已加入忽略规则）。记录用量、耗时、结束原因与有限重试事件，不记录 Prompt、工具参数和模型正文。`-s` 只让终端显示日志路径，不是日志开关。错误码和可选 Responses 对照见 [共享调用说明](../../shared/README.md#2026-10-04保持配置补齐调用证据)。
+
 `tests_live/test_live_tool_runtime.py` 把真实模型适配到手写的 `ToolRuntime`，验证模型提出的调用仍会经过 Registry、参数校验、权限和审计。配置方式见 [统一 live 配置](../../shared/README.md)，运行 `python -m pytest -q tests_live -m live`。普通 `pytest` 仍只运行离线用例。

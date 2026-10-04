@@ -77,4 +77,4 @@ description 要让 Agent 能判断何时加载。不要写空泛的“帮助处�
 
 安装第三方 Skill 前检查来源、脚本、副作用、网络和文件权限。Skill 是可执行流程载体，不能因为格式是 Markdown 就认为安全。
 
-最终用 [Agent Skills 规范](https://openagentskills.dev/docs/specification) 校验名称、frontmatter 和目录约束。
+最终用 [Agent Skills 规范](https://agentskills.io/specification) 校验名称、frontmatter 和目录约束。

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from time import perf_counter
-from typing import Literal
+from typing import Callable, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -9,6 +9,7 @@ from .chunking import chunk_documents
 from .context import answer_from_context
 from .data import DOCUMENTS
 from .indexes import BM25Index, DenseIndex, reciprocal_rank_fusion, rerank
+from .adapters import Embedder
 from .models import (
     Document,
     RAGAnswer,
@@ -33,7 +34,8 @@ class RAGConfig(BaseModel):
 
 
 class RAGPipeline:
-    def __init__(self, documents: list[Document], *, config: RAGConfig | None = None) -> None:
+    def __init__(self, documents: list[Document], *, config: RAGConfig | None = None,
+                 embedder: Embedder | None = None, reranker: Callable | None = None) -> None:
         self.config = config or RAGConfig()
         if self.config.chunk_overlap >= self.config.chunk_tokens:
             raise ValueError("chunk_overlap 必须小于 chunk_tokens")
@@ -42,7 +44,8 @@ class RAGPipeline:
             max_tokens=self.config.chunk_tokens,
             overlap_tokens=self.config.chunk_overlap,
         )
-        self.dense = DenseIndex(self.chunks)
+        self.dense = DenseIndex(self.chunks, embedder=embedder)
+        self.reranker = reranker or rerank
         self.bm25 = BM25Index(self.chunks)
 
     def retrieve_with_trace(
@@ -140,7 +143,7 @@ class RAGPipeline:
             return RetrievalResult(query=query, strategy=strategy, hits=hits, traces=traces)
 
         started = perf_counter()
-        hits = rerank(query, hybrid_hits, top_k=top_k)
+        hits = self.reranker(query, hybrid_hits, top_k=top_k)
         traces.append(
             StageTrace(
                 stage="rerank",

@@ -16,6 +16,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8,<9"]
 live = ["httpx>=0.28,<1"]
+persistence = ["langgraph-checkpoint-sqlite>=3.1,<4"]
 
 [project.scripts]
 langgraph-demo = "lg_lab.demo:main"

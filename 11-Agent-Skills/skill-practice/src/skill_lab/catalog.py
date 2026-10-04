@@ -6,6 +6,7 @@ import ast
 import re
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
+from typing import Literal
 
 import yaml
 
@@ -18,6 +19,10 @@ RESOURCE_MAX_BYTES = 256 * 1024
 ASSET_MAX_BYTES = 5 * 1024 * 1024
 ALLOWED_REFERENCE_SUFFIXES = {".md", ".txt", ".yaml", ".yml", ".json"}
 ALLOWED_FRONTMATTER_FIELDS = {"name", "description"}
+STANDARD_FRONTMATTER_FIELDS = ALLOWED_FRONTMATTER_FIELDS | {
+    "license", "compatibility", "metadata", "allowed-tools",
+}
+ValidationProfile = Literal["strict", "standard"]
 ALLOWED_ROOT_ENTRIES = {"SKILL.md", "agents", "scripts", "references", "assets"}
 ALLOWED_ASSET_SUFFIXES = {
     ".css",
@@ -93,6 +98,10 @@ class SkillMetadata:
     description: str
     path: Path
     frontmatter_bytes: int
+    license: str | None = None
+    compatibility: str | None = None
+    metadata: tuple[tuple[str, str], ...] = ()
+    allowed_tools: str | None = None
 
 
 @dataclass(frozen=True)
@@ -125,39 +134,58 @@ class SkillPackageReport:
     checked_resources: tuple[str, ...]
 
 
-def discover_skill(skill_dir: Path) -> SkillMetadata:
-    """只读取 SKILL.md 的 frontmatter，不把正文提前放进 Context。"""
+def discover_skill(skill_dir: Path, *, profile: ValidationProfile = "strict") -> SkillMetadata:
+    """只读 frontmatter；strict 是本地安全 profile，不是通用格式标准。"""
 
+    _validate_profile(profile)
     if skill_dir.is_symlink():
         raise UnsafeSkillPath("Skill 目录不能是符号链接")
     skill_dir = skill_dir.resolve(strict=True)
     path = _safe_path(skill_dir, "SKILL.md", allowed_roots={"SKILL.md"}, require_file=True)
     metadata, bytes_read = _read_frontmatter(path)
-    unexpected_fields = sorted(set(metadata) - ALLOWED_FRONTMATTER_FIELDS)
+    allowed_fields = ALLOWED_FRONTMATTER_FIELDS if profile == "strict" else STANDARD_FRONTMATTER_FIELDS
+    unexpected_fields = sorted(set(metadata) - allowed_fields)
     if unexpected_fields:
         raise SkillCatalogError(
-            "SKILL.md frontmatter 只允许 name/description，发现："
+            ("strict profile 的 frontmatter 只允许 name/description，发现："
+             if profile == "strict" else "标准未定义的 frontmatter 字段（扩展请放 metadata）：")
             + ", ".join(unexpected_fields)
         )
     name = metadata.get("name", "")
     description = metadata.get("description", "")
-    if not isinstance(name, str) or not NAME_PATTERN.fullmatch(name) or name != skill_dir.name:
+    if not isinstance(name, str) or len(name) > 64 or not NAME_PATTERN.fullmatch(name) or name != skill_dir.name:
         raise SkillCatalogError("Skill name 不合法或与目录名不一致")
     if not isinstance(description, str) or not description.strip():
         raise SkillCatalogError("Skill description 不能为空")
     if len(description) > 1_024:
         raise SkillCatalogError("Skill description 过长，无法作为轻量发现元数据")
+    for key in ("license", "compatibility", "allowed-tools"):
+        if key in metadata and (not isinstance(metadata[key], str) or not metadata[key].strip()):
+            raise SkillCatalogError(f"{key} 必须是非空字符串")
+    if len(metadata.get("compatibility", "")) > 500:
+        raise SkillCatalogError("compatibility 不能超过 500 字符")
+    extensions = metadata.get("metadata", {})
+    if not isinstance(extensions, dict) or any(
+        not isinstance(key, str) or not isinstance(value, str)
+        for key, value in extensions.items()
+    ):
+        raise SkillCatalogError("metadata 必须是字符串键到字符串值的 mapping")
     return SkillMetadata(
         name=name,
         description=description.strip(),
         path=skill_dir,
         frontmatter_bytes=bytes_read,
+        license=metadata.get("license"),
+        compatibility=metadata.get("compatibility"),
+        metadata=tuple(sorted(extensions.items())),
+        allowed_tools=metadata.get("allowed-tools"),
     )
 
 
-def discover_skills(root: Path) -> CatalogSnapshot:
+def discover_skills(root: Path, *, profile: ValidationProfile = "strict") -> CatalogSnapshot:
     """扫描一个目录下的 Skill；坏包会隔离到 issues，不影响其他包发现。"""
 
+    _validate_profile(profile)
     root = root.resolve(strict=True)
     if not root.is_dir():
         raise SkillCatalogError(f"Skill root 不是目录：{root}")
@@ -174,7 +202,7 @@ def discover_skills(root: Path) -> CatalogSnapshot:
         if not (candidate / "SKILL.md").is_file():
             continue
         try:
-            metadata = discover_skill(candidate)
+            metadata = discover_skill(candidate, profile=profile)
         except (OSError, SkillCatalogError, yaml.YAMLError) as exc:
             issues.append(CatalogIssue(str(candidate), "INVALID_SKILL", str(exc)))
             continue
@@ -199,8 +227,8 @@ class SkillCatalog:
         self._by_name = {skill.name: skill for skill in snapshot.skills}
 
     @classmethod
-    def from_root(cls, root: Path) -> "SkillCatalog":
-        return cls(discover_skills(root))
+    def from_root(cls, root: Path, *, profile: ValidationProfile = "strict") -> "SkillCatalog":
+        return cls(discover_skills(root, profile=profile))
 
     def metadata(self, name: str) -> SkillMetadata:
         try:
@@ -294,9 +322,14 @@ def load_instructions(metadata: SkillMetadata) -> str:
     return SkillLoader(SkillCatalog(snapshot)).load_instructions(metadata.name)
 
 
-def validate_skill_package(skill_dir: Path) -> SkillPackageReport:
-    """静态校验包结构、链接、YAML 和 Python 语法，不执行任何脚本。"""
+def validate_skill_package(
+    skill_dir: Path, *, profile: ValidationProfile = "strict"
+) -> SkillPackageReport:
+    """默认本地 strict 包验收；standard 只做格式与路径卫生，不授予执行权限。"""
 
+    _validate_profile(profile)
+    if profile == "standard":
+        return validate_standard_format(skill_dir)
     issues: list[CatalogIssue] = []
     resources: list[str] = []
     skill_name: str | None = None
@@ -306,11 +339,11 @@ def validate_skill_package(skill_dir: Path) -> SkillPackageReport:
     except (OSError, SkillCatalogError, yaml.YAMLError) as exc:
         return SkillPackageReport(None, False, (CatalogIssue(str(skill_dir), "INVALID_SKILL", str(exc)),), ())
 
-    # Agent Skills 包只保留标准入口和资源目录；examples/ 等生成器临时目录不能混入产物。
+    # 本项目 strict profile 的目录 allowlist；通用 Agent Skills 标准允许额外目录。
     for entry in sorted(metadata.path.iterdir(), key=lambda value: value.name):
         if entry.name not in ALLOWED_ROOT_ENTRIES:
             issues.append(
-                CatalogIssue(entry.name, "UNEXPECTED_ROOT_ENTRY", "Skill 根目录只允许标准文件/目录")
+                CatalogIssue(entry.name, "UNEXPECTED_ROOT_ENTRY", "strict profile 不允许此根目录项目")
             )
 
     # 校验器要看完整包，但与运行时发现阶段分开，避免把“静态验收”误当成“常驻加载”。
@@ -389,6 +422,50 @@ def validate_skill_package(skill_dir: Path) -> SkillPackageReport:
                 issues.append(CatalogIssue(relative, "INVALID_RESOURCE", str(exc)))
 
     return SkillPackageReport(skill_name, not issues, tuple(issues), tuple(resources))
+
+
+def _validate_profile(profile: str) -> None:
+    if profile not in {"strict", "standard"}:
+        raise SkillCatalogError("profile 必须是 strict 或 standard")
+
+
+def validate_standard_format(skill_dir: Path) -> SkillPackageReport:
+    """通用 frontmatter/目录格式检查，并保留本加载器的路径和大小安全约束。
+
+    不强加 Python-only、assets 类型或 agents/openai.yaml UI 契约；不运行脚本。
+    合格仅表示格式可识别，不代表依赖可用、内容可信或可在任意宿主执行。
+    """
+    try:
+        metadata = discover_skill(skill_dir, profile="standard")
+        instructions, _ = _read_bounded(metadata.path / "SKILL.md", INSTRUCTIONS_MAX_BYTES)
+    except (OSError, SkillCatalogError, yaml.YAMLError) as exc:
+        return SkillPackageReport(None, False, (CatalogIssue(str(skill_dir), "INVALID_SKILL", str(exc)),), ())
+    issues: list[CatalogIssue] = []
+    resources: list[str] = []
+    roots = {entry.name for entry in metadata.path.iterdir()}
+    for path in sorted(metadata.path.rglob("*")):
+        relative = path.relative_to(metadata.path).as_posix()
+        if path.is_symlink():
+            issues.append(CatalogIssue(relative, "SYMLINK_RESOURCE", "资源不能是符号链接"))
+            continue
+        if not path.is_file() or relative == "SKILL.md":
+            continue
+        try:
+            safe = _safe_path(metadata.path, relative, allowed_roots=roots, require_file=True)
+            if safe.stat().st_size > ASSET_MAX_BYTES:
+                raise SkillCatalogError("资源超过本加载器大小上限")
+            resources.append(relative)
+        except (OSError, SkillCatalogError) as exc:
+            issues.append(CatalogIssue(relative, "INVALID_RESOURCE", str(exc)))
+    for raw in MARKDOWN_LINK.findall(instructions):
+        target = raw.split("#", 1)[0].strip()
+        if not target or "://" in target or target.startswith("#"):
+            continue
+        try:
+            _safe_path(metadata.path, target, allowed_roots=roots, require_file=True)
+        except (OSError, SkillCatalogError) as exc:
+            issues.append(CatalogIssue(target, "BROKEN_OR_UNSAFE_LINK", str(exc)))
+    return SkillPackageReport(metadata.name, not issues, tuple(issues), tuple(resources))
 
 
 def _validate_asset_links(skill_root: Path, asset_path: Path, text: str) -> list[CatalogIssue]:
@@ -476,6 +553,8 @@ def _read_frontmatter(path: Path) -> tuple[dict[str, object], int]:
     parsed = yaml.safe_load("".join(raw_lines))
     if not isinstance(parsed, dict):
         raise SkillCatalogError("YAML frontmatter 顶层必须是 mapping")
+    if not all(isinstance(key, str) for key in parsed):
+        raise SkillCatalogError("YAML frontmatter 字段名必须是字符串")
     return parsed, bytes_read
 
 

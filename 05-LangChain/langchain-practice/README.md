@@ -1,5 +1,18 @@
 # LangChain 核心抽象与受控 Agent 练习
 
+## 2026-10：middleware 与结构化 Agent
+
+`middleware.py` 的 `wrap_tool_call` 已接入 `agent.py` 的 `create_agent`，记录工具执行阶段但不记敏感参数；授权仍在工具边界执行。`structured_agent.py` 使用 `ProviderStrategy` / `ToolStrategy`，前者必须显式确认供应商原生 schema 能力；两者都不能替代业务校验。
+
+```powershell
+python -m lc_lab.structured_agent
+python -m pytest tests/test_v1_extensions.py -q
+```
+
+阅读顺序：`agent.py` → `middleware.py` → `structured_agent.py` → `test_v1_extensions.py`。离线模型用于检查框架路径是否走通，不能证明当前真实模型支持原生输出，也不能据此比较两种策略的模型准确率。真实模型仍使用 [统一配置](../../shared/README.md)。
+
+依据：[LangChain structured output](https://docs.langchain.com/oss/python/langchain/structured-output)。
+
 这个项目的默认 demo 和测试可完全离线运行。它使用真正的 LangChain Messages、Prompt、Tool、Agent、Retriever 和 Runnable API，同时补上框架不会自动提供的业务权限、工具预算、停止条件、结构化失败和审计事件。默认模型是可预测的 `DemoChatModel`；`tests_live/` 才接入环境变量配置的真实模型。
 
 ## 架构与边界

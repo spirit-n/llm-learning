@@ -1,5 +1,20 @@
 # Agent Skill 发现、加载与验收工程
 
+## 2026-10：通用格式与本地严格策略
+
+`discover_skill(..., profile="standard")` / `validate_skill_package(..., profile="standard")` 支持 `license`、`compatibility`、`metadata`、实验性的 `allowed-tools` 及额外资源目录；字段含义依据 [Agent Skills specification](https://agentskills.io/specification)。默认仍为 `strict`：只收 name/description、使用本项目目录/文件类型限制，并检查本地 UI 元数据。
+
+两种 profile 都保留路径与大小约束，不执行脚本。这里的 standard 是格式检查＋本加载器安全限制，不是任意宿主兼容性认证；`allowed-tools` 也不授予程序实际权限。Python-only 脚本策略、`agents/openai.yaml` 要求和资源 allowlist 属于**本课程的宿主策略**，不是通用格式的强制规定。
+
+```python
+from pathlib import Path
+from skill_lab.catalog import validate_skill_package
+report = validate_skill_package(Path("../clickhouse-sql-review"), profile="standard")
+print(report.valid, report.issues)
+```
+
+运行 `python -m pytest tests/test_catalog.py -q` 比较两个 profile；阅读 `catalog.py` 的 `discover_skill` 和 `validate_standard_format`。引入第三方 Skill 仍需人工审查内容、依赖与执行权限，格式正确不等于可信。
+
 实际 Skill 位于上一级 [clickhouse-sql-review](../clickhouse-sql-review/SKILL.md)。本工程不只演示“读一个 Markdown”：它把目录发现、确定性路由、渐进披露、路径隔离、包静态校验和 SQL 安全 validator 分开实现，并为每层准备失败场景。
 
 ## 运行

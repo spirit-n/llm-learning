@@ -1,5 +1,7 @@
 # 05｜LangChain
 
+2026-10 补充：[工程 README](./langchain-practice/README.md#2026-10middleware-与结构化-agent) 新增实际接入的 middleware、ProviderStrategy/ToolStrategy 对照，沿用当前依赖范围，不升级已有环境。
+
 **安排：** 第 4 周第 1～2 天，P1。学“当前核心抽象与集成”，不通读框架。
 
 详细学习：[LangChain 零基础入门与边界](./01-LangChain入门实操.md)。

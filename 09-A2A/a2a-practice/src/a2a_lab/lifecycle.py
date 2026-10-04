@@ -6,6 +6,7 @@ import math
 from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
+from collections.abc import Callable
 from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -14,6 +15,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 class TaskState(StrEnum):
     SUBMITTED = "submitted"
     WORKING = "working"
+    INPUT_REQUIRED = "input-required"
+    AUTH_REQUIRED = "auth-required"
     COMPLETED = "completed"
     FAILED = "failed"
     REJECTED = "rejected"
@@ -29,7 +32,10 @@ TERMINAL_STATES = {
 
 ALLOWED_TRANSITIONS = {
     TaskState.SUBMITTED: {TaskState.WORKING, TaskState.REJECTED, TaskState.CANCELED},
-    TaskState.WORKING: {TaskState.COMPLETED, TaskState.FAILED, TaskState.CANCELED},
+    TaskState.WORKING: {TaskState.COMPLETED, TaskState.FAILED, TaskState.CANCELED,
+                        TaskState.INPUT_REQUIRED, TaskState.AUTH_REQUIRED},
+    TaskState.INPUT_REQUIRED: {TaskState.WORKING, TaskState.CANCELED, TaskState.FAILED},
+    TaskState.AUTH_REQUIRED: {TaskState.WORKING, TaskState.CANCELED, TaskState.FAILED},
 }
 
 
@@ -175,6 +181,8 @@ class TaskLifecycleService:
         return tuple(event for event in self._events[task_id] if event.sequence > after)
 
     def start(self, task_id: str, tenant: str) -> TaskRecord:
+        if self.get(task_id, tenant).state != TaskState.SUBMITTED:
+            raise LifecycleError("INVALID_STATE_TRANSITION", "只能启动新提交的任务；等待状态须通过 resume 校验")
         return self._transition(task_id, tenant, TaskState.WORKING, "task_started")
 
     def complete(self, task_id: str, tenant: str, artifact: str) -> TaskRecord:
@@ -187,6 +195,32 @@ class TaskLifecycleService:
             "artifact_ready",
             artifact=artifact,
         )
+
+    def require_input(self, task_id: str, tenant: str) -> TaskRecord:
+        return self._transition(task_id, tenant, TaskState.INPUT_REQUIRED, "input_required")
+
+    def require_auth(self, task_id: str, tenant: str) -> TaskRecord:
+        return self._transition(task_id, tenant, TaskState.AUTH_REQUIRED, "auth_required")
+
+    def resume(
+        self, task_id: str, tenant: str, *, input_text: str | None = None,
+        authorize: Callable[[TaskRecord], bool] | None = None,
+    ) -> TaskRecord:
+        """教学领域层恢复；authorize 必须由可信后端注入，不能由模型/请求体指定。
+
+        输入内容不写事件日志；业务处理者须在恢复前单独校验、保存所需输入。
+        这里不是 OAuth 实现，也未映射全部 A2A wire 字段。
+        """
+        current = self.get(task_id, tenant)
+        if current.state == TaskState.INPUT_REQUIRED:
+            if not isinstance(input_text, str) or not input_text.strip():
+                raise LifecycleError("INPUT_MISSING", "任务仍需补充输入")
+        elif current.state == TaskState.AUTH_REQUIRED:
+            if authorize is None or authorize(current) is not True:
+                raise LifecycleError("AUTH_REQUIRED", "可信后端尚未验证授权")
+        else:
+            raise LifecycleError("INVALID_STATE_TRANSITION", "只能恢复等待输入或鉴权的任务")
+        return self._transition(task_id, tenant, TaskState.WORKING, "task_resumed")
 
     def fail(self, task_id: str, tenant: str, error_code: str) -> TaskRecord:
         return self._transition(

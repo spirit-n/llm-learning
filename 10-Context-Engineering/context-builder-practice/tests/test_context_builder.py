@@ -409,7 +409,10 @@ def test_diagnostics_distinguish_selection_version_compression_and_model_use():
 
 def test_experiments_cover_all_context_engineering_decisions():
     experiments = run_all_experiments()
-    assert set(experiments) == {"selection", "history", "tool_payload", "source_priority", "layer_budget"}
+    assert set(experiments) == {
+        "selection", "history", "tool_payload", "source_priority", "layer_budget",
+        "compaction_recovery", "deferred_tool_discovery",
+    }
     assert experiments["source_priority"] == {
         "without_source_metadata": "web-v99",
         "with_source_priority": "catalog-v2",

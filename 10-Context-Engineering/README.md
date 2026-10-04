@@ -1,5 +1,7 @@
 # 10｜Context Engineering
 
+2026-10 补充：[工程 README](./context-builder-practice/README.md#2026-10多轮压缩恢复与按需工具目录) 增加两次压缩后的任务恢复，以及权限过滤后的按需 schema 加载。验收目标不是“文本变短”，而是下一步仍能正确执行。
+
 **安排：** 第 5 周中段，P1，但原则贯穿全部项目。
 
 详细学习：[设计一个可测量的 Context Builder](./01-Context-Builder实操.md)。

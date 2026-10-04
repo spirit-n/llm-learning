@@ -1,5 +1,17 @@
 # A2A 委托与任务生命周期练习
 
+## 2026-10：等待输入与鉴权
+
+`lifecycle.py` 新增 `input-required` / `auth-required`，支持校验后的 resume；等待期间不能直接 complete，不能用 start 绕过恢复校验，取消后不能恢复。测试：
+
+```powershell
+python -m pytest tests/test_interrupted_states.py -q
+```
+
+领域模型继续使用当前字符串表示；[最新规范](https://a2a-protocol.org/latest/specification/) 中的 `TASK_STATE_INPUT_REQUIRED` / `TASK_STATE_AUTH_REQUIRED` 是中断状态，不是终态。规范版本、安装的 SDK 版本与本地自定义 HTTP API 要分别注明。这次补的是内存领域层，没有替换既有 SDK 或声称新增完整协议绑定。
+
+`resume(..., authorize=checker)` 的 checker 只能由可信后端提供；模型或请求 JSON 不能传入“已鉴权=true”来放行。输入校验和持久化仍由业务层负责，事件不保存输入原文。生产还需任务存储、超时、授权流程与并发恢复控制。
+
 同一个“数据 Agent 委托报告 Agent”的场景实现两遍：
 
 - `custom_http.py`：自己约定发现、幂等、任务、事件游标、状态、取消和错误字段。

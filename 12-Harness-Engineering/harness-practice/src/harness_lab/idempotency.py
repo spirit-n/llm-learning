@@ -2,10 +2,17 @@ from __future__ import annotations
 
 from copy import deepcopy
 from threading import Lock
-from typing import Any, Literal
+from typing import Any, Literal, Protocol
 
 
 IdempotencyState = Literal["missing", "reserved", "in_progress", "completed", "unknown", "conflict"]
+
+
+class IdempotencyStore(Protocol):
+    def lookup(self, key: str, signature: str) -> tuple[IdempotencyState, Any | None]: ...
+    def reserve(self, key: str, signature: str) -> tuple[IdempotencyState, Any | None]: ...
+    def complete(self, key: str, signature: str, data: Any) -> None: ...
+    def mark_unknown(self, key: str, signature: str) -> None: ...
 
 
 class InMemoryIdempotencyStore:

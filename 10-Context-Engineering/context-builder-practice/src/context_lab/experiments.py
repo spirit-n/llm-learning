@@ -6,6 +6,8 @@ from collections import Counter
 
 from context_lab.builder import ContextBuilder, REQUEST_TASK_ID
 from context_lab.models import BuildRequest, BuildResult, ContextItem
+from context_lab.compaction import run_compaction_experiment
+from context_lab.tool_discovery import run_tool_discovery_experiment
 
 
 def sample_items() -> list[ContextItem]:
@@ -221,4 +223,6 @@ def run_all_experiments() -> dict[str, object]:
         "tool_payload": compare_tool_payloads(),
         "source_priority": compare_source_priority(),
         "layer_budget": compare_layer_budgets(),
+        "compaction_recovery": run_compaction_experiment(),
+        "deferred_tool_discovery": run_tool_discovery_experiment(),
     }

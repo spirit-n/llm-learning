@@ -8,6 +8,7 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from lc_lab.domain import DEFAULT_CATALOG, DEFAULT_CONTEXT, MetricCatalog, UserContext
 from lc_lab.model import DemoChatModel
 from lc_lab.tools import ToolCallBudget, build_metric_definition_tool
+from lc_lab.middleware import tool_audit_middleware
 
 
 def build_agent(
@@ -16,9 +17,11 @@ def build_agent(
     context: UserContext = DEFAULT_CONTEXT,
     catalog: MetricCatalog = DEFAULT_CATALOG,
     tool_budget: ToolCallBudget | None = None,
+    tool_audit: list[dict[str, str]] | None = None,
 ):
     return create_agent(
         model=model or DemoChatModel(),
+        middleware=[tool_audit_middleware(tool_audit)] if tool_audit is not None else [],
         tools=[
             build_metric_definition_tool(
                 context=context, catalog=catalog, budget=tool_budget

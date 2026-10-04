@@ -1,5 +1,7 @@
 # 13｜评测与可观测性
 
+2026-10 补充：[多工具轨迹与 OpenTelemetry](./eval-observability-practice/README.md#2026-10多工具轨迹与-opentelemetry) 新增可恢复重试、偏序约束和跨线程 trace 传播测试，不再只能比较一个固定工具序列。
+
 **安排：** 第 3 周开始，第 7 周集中完善，P0。
 
 详细学习：[从 20 条样本建立第一个 Eval Harness](./01-Eval-Harness实操.md)。

@@ -1,0 +1,66 @@
+name: Offline learning projects
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  projects:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: 03-Function-Calling/tool-calling-practice
+            extras: dev
+          - project: 04-RAG检索工程/rag-practice
+            extras: dev
+          - project: 05-LangChain/langchain-practice
+            extras: dev
+          - project: 06-LangGraph/langgraph-practice
+            extras: dev,persistence
+          - project: 07-AgentScope/agentscope-practice
+            extras: dev
+          - project: 08-MCP/mcp-practice
+            extras: dev
+          - project: 09-A2A/a2a-practice
+            extras: dev
+          - project: 10-Context-Engineering/context-builder-practice
+            extras: dev
+          - project: 11-Agent-Skills/skill-practice
+            extras: dev
+          - project: 12-Harness-Engineering/harness-practice
+            extras: dev
+          - project: 13-评测与可观测性/eval-observability-practice
+            extras: dev,otel
+          - project: 14-模型基础与微调/training-data-practice
+            extras: dev
+          - project: 15-部署与生产工程/deployment-practice
+            extras: dev
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install this project only
+        run: python -m pip install -e ".[${{ matrix.extras }}]"
+      - name: Run offline suite only
+        run: python -m pytest tests -q
+
+  shared:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install "pytest>=8,<9" "httpx>=0.28,<1"
+      - run: python -m pytest shared/tests -q

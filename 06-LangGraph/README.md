@@ -1,5 +1,7 @@
 # 06｜LangGraph 与 Agent 工作流
 
+2026-10 补充：[SQLite 跨进程恢复实验](./langgraph-practice/README.md#2026-10sqlite-跨进程恢复) 将内存 checkpoint 与持久化、幂等执行分开验证；原来的内存 Demo 保留。
+
 **安排：** 第 4 周后 4 天，P0，第二重点。
 
 详细学习：[LangGraph 从状态图到可恢复 Agent](./01-LangGraph入门实操.md)。

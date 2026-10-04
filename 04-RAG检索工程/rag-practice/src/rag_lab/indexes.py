@@ -6,6 +6,7 @@ from collections import Counter, defaultdict
 
 from .models import Chunk, SearchHit
 from .text import cosine, term_counts, tokenize
+from .adapters import Embedder
 
 
 class HashingEmbedder:
@@ -24,7 +25,7 @@ class HashingEmbedder:
 
 
 class DenseIndex:
-    def __init__(self, chunks: list[Chunk], embedder: HashingEmbedder | None = None) -> None:
+    def __init__(self, chunks: list[Chunk], embedder: Embedder | None = None) -> None:
         self.chunks = chunks
         self.embedder = embedder or HashingEmbedder()
         self.vectors = {

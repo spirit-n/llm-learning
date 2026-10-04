@@ -12,6 +12,7 @@ dependencies = ["pydantic>=2.12,<3"]
 [project.optional-dependencies]
 dev = ["pytest>=8,<9"]
 live = ["httpx>=0.28,<1"]
+otel = ["opentelemetry-sdk>=1.35,<2", "opentelemetry-exporter-otlp-proto-http>=1.35,<2"]
 
 [project.scripts]
 eval-demo = "eval_lab.demo:main"
@@ -24,4 +25,3 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-ra"
 markers = ["live: calls a real model endpoint and may incur cost"]
-

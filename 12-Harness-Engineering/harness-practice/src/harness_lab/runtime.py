@@ -12,7 +12,7 @@ from uuid import uuid4
 from pydantic import ValidationError
 
 from .errors import HarnessError
-from .idempotency import InMemoryIdempotencyStore
+from .idempotency import IdempotencyStore, InMemoryIdempotencyStore
 from .models import Observation, PlanDecision, RunResult, TaskSpec, UserContext, Verification
 from .planner import Planner
 from .registry import ToolRegistry, ToolSpec
@@ -38,7 +38,7 @@ class AgentHarness:
         registry: ToolRegistry,
         verifier: Verifier,
         *,
-        idempotency_store: InMemoryIdempotencyStore | None = None,
+        idempotency_store: IdempotencyStore | None = None,
         clock: Callable[[], float] = time.monotonic,
         sleeper: Callable[[float], None] = time.sleep,
     ):

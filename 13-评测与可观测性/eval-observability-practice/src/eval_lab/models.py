@@ -19,6 +19,12 @@ class EvalInput(BaseModel):
     user_input: str = Field(min_length=1)
 
 
+class ToolExpectation(StrictModel):
+    name: str = Field(min_length=1)
+    arguments: dict[str, Any] = Field(default_factory=dict)
+    argument_match: Literal["exact", "contains"] = "exact"
+
+
 class EvalCase(StrictModel):
     id: str
     input: str
@@ -32,9 +38,23 @@ class EvalCase(StrictModel):
     max_steps: int = Field(default=3, ge=0)
     tags: list[str] = Field(min_length=1)
     weight: float = Field(default=1, gt=0, le=10)
+    required_tools: list[ToolExpectation] = Field(default_factory=list)
+    required_order: list[tuple[str, str]] = Field(default_factory=list)
+    allow_retries: bool = False
+    max_retry_attempts: int = Field(default=1, ge=1, le=5)
+    retryable_error_codes: tuple[str, ...] = ("transient",)
 
     @model_validator(mode="after")
     def validate_expectations(self) -> "EvalCase":
+        names = [item.name for item in self.required_tools]
+        if self.required_tools and self.expected_tool is not None:
+            raise ValueError("required_tools 与单工具 expected_tool 不能同时使用")
+        if len(names) != len(set(names)) or set(names).intersection(self.forbidden_tools):
+            raise ValueError("required_tools 不可重复或包含禁止工具")
+        if self.required_tools and self.expected_behavior != "answer":
+            raise ValueError("多工具样本必须是 answer 行为")
+        if any(a == b or a not in names or b not in names for a, b in self.required_order):
+            raise ValueError("required_order 必须引用不同的 required_tools")
         if self.expected_arguments and self.expected_tool is None:
             raise ValueError("expected_arguments 只能和 expected_tool 一起使用")
         if self.expected_tool is None and self.argument_match != "exact":
@@ -53,6 +73,7 @@ class ToolCallRecord(StrictModel):
     arguments: dict[str, Any] = Field(default_factory=dict)
     status: Literal["ok", "error"] = "ok"
     duration_ms: float = Field(default=0, ge=0)
+    error_code: str | None = None
 
 
 class Span(StrictModel):

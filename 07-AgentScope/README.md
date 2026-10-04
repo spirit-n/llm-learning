@@ -4,7 +4,7 @@
 
 详细学习：[AgentScope 安装、概念与对照实验](./01-AgentScope入门实操.md)。
 
-配套工程：[agentscope-practice](./agentscope-practice/README.md)。它使用当前 AgentScope 2.0.4 的 Message、Agent、Tool、Toolkit 和 ReAct 配置；默认离线演示专家路由、无工具权限的审核 Agent、显式消息流、超时与失败隔离，`tests_live/` 验证真实模型工具循环。
+配套工程：[agentscope-practice](./agentscope-practice/README.md)。它使用已验证的 AgentScope 2.0.4.post1 的 Message、Agent、Tool、Toolkit 和 ReAct 配置；默认离线演示专家路由、无工具权限的审核 Agent、显式消息流、超时与失败隔离，`tests_live/` 验证真实模型工具循环。
 
 快速开始：
 
@@ -21,7 +21,7 @@ python -m pytest -q
 
 先完成一个单 Agent 工具调用，再学习多 Agent。你需要会 Python 函数、类的基本读法和异步的直觉；暂时不需要分布式系统知识。多 Agent 看不懂时先退回单 Agent，不要靠增加角色解决问题。
 
-> 注意：AgentScope 与历史上的 ModelScope-Agent/ms-agent 不是同一学习入口。本计划以 `agentscope-ai/agentscope` 和 `doc.agentscope.io` 当前文档为准。
+> 注意：AgentScope 与历史上的 ModelScope-Agent/ms-agent 不是同一学习入口。本计划以 `agentscope-ai/agentscope` 和 `docs.agentscope.io` 当前文档为准。
 
 ## 必学内容（P1）
 
@@ -59,8 +59,8 @@ memory、state/session、concurrent agents、Studio、tracing、evaluation、MCP
 
 | 优先级 | 资料 | 它是干什么的 | 零基础怎么使用 |
 |---|---|---|---|
-| P0 | [AgentScope Tutorial](https://doc.agentscope.io/tutorial/) | 官方分步教程，从安装、Message、Model、Tool 到 ReAct Agent | 这是首选入口。按页面顺序做到第一个 ReAct Agent；每完成一步，打印对象和消息，确认数据如何流动 |
-| P0 | [AgentScope 文档首页](https://doc.agentscope.io/) | 整个文档目录，包含 workflow、memory、MCP、Skill、A2A、Studio、tracing 和 evaluation | 把它当地图。先看 Tutorial，遇到本周具体功能再从目录进入，不要从头读完所有功能 |
+| P0 | [AgentScope Tutorial](https://docs.agentscope.io/) | 官方分步教程，从安装、Message、Model、Tool 到 ReAct Agent | 这是首选入口。按页面顺序做到第一个 ReAct Agent；每完成一步，打印对象和消息，确认数据如何流动 |
+| P0 | [AgentScope 文档首页](https://docs.agentscope.io/) | 整个文档目录，包含 workflow、memory、MCP、Skill、A2A、Studio、tracing 和 evaluation | 把它当地图。先看 Tutorial，遇到本周具体功能再从目录进入，不要从头读完所有功能 |
 | 查示例/P1 | [AgentScope GitHub](https://github.com/agentscope-ai/agentscope) | 源代码、README、examples、版本发布和 issue；可确认真实安装方式和最新变化 | 先看 README/Quickstart 和与你的实验同名的 example。不要直接复制大型多 Agent 示例；先检查发布时间和当前分支 |
 | 原理/P2 | [AgentScope 论文](https://arxiv.org/abs/2402.14034) | 解释框架提出时的设计目标、消息交换、多 Agent 平台架构和实验 | 非科班不要求通读。先看摘要、架构图、结论；数学/实验细节看不懂可跳过，用于回答“它为什么这样设计” |
 

@@ -37,6 +37,8 @@ def evaluate(case: EvalCase, trace: AgentTrace) -> tuple[Scores, list[str]]:
     ]
     repeated = len(call_keys) != len(set(call_keys))
     trajectory = float(len(trace.tool_calls) <= case.max_steps and not repeated)
+    if case.required_tools:
+        tool_selection, arguments, tool_execution, trajectory = _evaluate_multi_tool(case, trace)
     trace_quality = float(_valid_span_graph(trace) and _tool_spans_cover_calls(trace))
     evidence = float(set(case.expected_evidence_ids).issubset(trace.evidence_ids))
     safety = float(not set(tool_names).intersection(case.forbidden_tools))
@@ -58,6 +60,44 @@ def evaluate(case: EvalCase, trace: AgentTrace) -> tuple[Scores, list[str]]:
             reasons.append(name)
     goal_success = float(all(value == 1 for value in components.values()))
     return Scores(**components, goal_success=goal_success), reasons
+
+
+def _evaluate_multi_tool(case: EvalCase, trace: AgentTrace) -> tuple[float, float, float, float]:
+    """Grade required outcomes/ordering, not one rigid total sequence."""
+    calls = trace.tool_calls
+    allowed = {item.name for item in case.required_tools}
+    selected = not any(call.name not in allowed for call in calls)
+    arguments_ok = True
+    for expected in case.required_tools:
+        successful = [call for call in calls if call.name == expected.name and call.status == "ok"]
+        selected &= bool(successful)
+        matching = lambda args: (args == expected.arguments if expected.argument_match == "exact"
+                                 else all(args.get(k) == v for k, v in expected.arguments.items()))
+        # Failed attempts must obey the same argument policy as successful attempts.
+        arguments_ok &= all(matching(call.arguments) for call in calls if call.name == expected.name)
+    groups: dict[str, list] = {}
+    for call in calls:
+        key = json.dumps([call.name, call.arguments], sort_keys=True, ensure_ascii=False)
+        groups.setdefault(key, []).append(call)
+    execution_ok = True
+    repetition_ok = True
+    for group in groups.values():
+        if len(group) == 1:
+            execution_ok &= group[0].status == "ok"
+            continue
+        legal_retry = (case.allow_retries and len(group) <= case.max_retry_attempts
+                       and group[-1].status == "ok"
+                       and all(call.status == "error" and call.error_code in case.retryable_error_codes
+                               for call in group[:-1]))
+        repetition_ok &= legal_retry
+        execution_ok &= legal_retry
+    order_ok = True
+    for before, after in case.required_order:
+        successes = [i for i, call in enumerate(calls) if call.name == before and call.status == "ok"]
+        attempts = [i for i, call in enumerate(calls) if call.name == after]
+        order_ok &= bool(successes and attempts and min(successes) < min(attempts))
+    return (float(selected), float(arguments_ok), float(execution_ok),
+            float(len(calls) <= case.max_steps and repetition_ok and order_ok))
 
 
 def _valid_span_graph(trace: AgentTrace) -> bool:

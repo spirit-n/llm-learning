@@ -1,5 +1,7 @@
 # 从第一个 MCP Server 到安全工具服务
 
+本页代码使用已验证的 Python SDK 1.x / 2025 协议基线；2026-07-28 新协议的无握手流程不能直接套进来。先阅读 [版本迁移边界](./03-2026协议迁移边界.md)，保留下方安装约束，不全局升级。
+
 ## 1. 先画边界
 
 ```text
@@ -15,7 +17,7 @@ Host 负责用户体验与整体权限上下文；Client 管理协议连接；Se
 
 ```powershell
 conda activate llm-learning
-python -m pip install -U mcp
+python -m pip install "mcp>=1.29,<2"
 python -c "import mcp; print('MCP import OK')"
 ```
 

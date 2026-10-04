@@ -1,5 +1,19 @@
 # 可审计 Context Builder 练习
 
+## 2026-10：多轮压缩恢复与按需工具目录
+
+```powershell
+python -m context_lab.compaction
+python -m context_lab.tool_discovery
+python -m pytest tests/test_compaction.py tests/test_tool_discovery.py -q
+```
+
+先看 `compaction.py`：可信事件 → 目标/决定/待办/证据引用 → JSON checkpoint → 两次恢复执行。实验会比较事实保留、恢复是否成功，以及故意删掉口径/待办/证据后是否拒绝；丢弃的讨论文本不能暗中改变任务。
+
+再看 `tool_discovery.py`：先按权限过滤工具目录，再关键词搜索与按需加载 schema，比较定义长度、工具召回、精确率与额外发现步骤。最终执行仍要重新鉴权。这里是确定性机制实验，不是 LLM 摘要质量、真实 tokenizer 计数或网络延迟实测，也不是供应商 Tool Search API 的兼容实现。
+
+模型原生 compaction/tool search 作为可选 P3 能力，见 [技术雷达](../../18-前沿技术雷达/02-2026-10技术栈更新与采用清单.md)。真实摘要实验应使用同一多轮轨迹，评估跨压缩边界任务成功率，不只展示节省比例。
+
 这个工程不把 Context Engineering 简化成“把字符串按优先级拼起来”。它实现了一条可回放的构建流水线：先做权限和时效过滤，再按来源权威解决冲突/重复，随后压缩、分配整体与分层 token 预算，最后输出 Context、manifest 和裁剪诊断。
 
 默认 demo 与单元测试完全离线、同一输入输出确定。`tests_live/` 只验证真实模型是否采用已经筛选好的 Context，不让模型参与权限或冲突裁决。

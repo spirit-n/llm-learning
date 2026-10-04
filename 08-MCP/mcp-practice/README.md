@@ -1,5 +1,7 @@
 # 安全 MCP Host/Server 与协议边界练习
 
+2026-10 说明：此工程是 **Python SDK 1.x / 2025 协议基线**，不是最新版示例；安装命令需保留 `<2`。新协议的无握手请求、MRTR、Tasks 扩展和远程鉴权参见 [迁移边界](../03-2026协议迁移边界.md)。这里的 HTTP token/SSRF 测试不等于完整 OAuth 互操作验证，也不宣称支持 Tasks/Elicitation 全流程。
+
 项目使用当前官方 Python SDK 的 `FastMCP` 和 `ClientSession`，实现一个不连接真实数据库的指标服务。除 Tool、Resource、Resource Template 和 Prompt 外，还实现了 Host 侧能力 allowlist、可信参数注入、scope 授权、参数预检、超时和分层错误，并把查询权限、幂等与审计下沉到不依赖 MCP 的服务层。
 
 默认 demo 和单元测试离线运行；`tests_live/` 只让真实模型选择 MCP Tool，Server 工具仍使用固定教学数据。

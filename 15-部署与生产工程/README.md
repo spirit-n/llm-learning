@@ -1,5 +1,7 @@
 # 15｜部署与生产工程
 
+2026-10 新增可运行工程：[deployment-practice](./deployment-practice/README.md)。提供离线 FastAPI、真实存储 readiness、HTTP 测试、Dockerfile 与 Compose；不调用模型，不读密钥，先在本机学习部署与故障处理。
+
 **安排：** 第 5 周用 2～3 小时学习 Docker 基础，第 7 周完成部署与生产化整合，P0。后端经验是你的差异化优势。
 
 详细学习：[从本地 FastAPI 到 Docker 的分步部署](./01-FastAPI与Docker实操.md)。

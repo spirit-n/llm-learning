@@ -1,5 +1,23 @@
 # LangGraph 可恢复、可审计的 SQL 工作流练习
 
+## 2026-10：SQLite 跨进程恢复
+
+在本工程的独立环境装可选依赖，然后用同一个 thread ID 执行两次命令（两个独立进程）：
+
+```powershell
+python -m pip install -e ".[dev,persistence]"
+New-Item -ItemType Directory -Force artifacts | Out-Null
+python -m lg_lab.persistent_demo pause --checkpoint artifacts/checkpoints.sqlite --ledger artifacts/ledger.sqlite --thread lesson-1
+python -m lg_lab.persistent_demo approve --checkpoint artifacts/checkpoints.sqlite --ledger artifacts/ledger.sqlite --thread lesson-1
+python -m pytest tests/test_persistence.py -q
+```
+
+先看到 `paused=true, execution_count=0`，恢复后 `completed, execution_count=1`。需要重做时换 thread ID；已完成的线程不能再次审批。`persistence.py` 将图状态放进 `SqliteSaver`，另用 SQLite 结果台账保护执行；测试覆盖“结果已提交、图 checkpoint 尚未提交时崩溃”，重启读取旧结果而不重复产生结果。
+
+阅读顺序：`persistent_demo.py` → `persistence.py` → `graph.py` → `test_persistence.py`。缺可选包时只有 SQLite saver 的测试跳过，结果台账仍可测试。本轮在临时独立环境使用 `langgraph-checkpoint-sqlite 3.1.1` 通过全部 4 项；没有升级原环境。
+
+边界：这是本地教学结果事务，不是任意 HTTP/退款/邮件的 exactly-once 保证；外部副作用仍需下游幂等键、查询对账或 outbox。checkpoint 文件也必须限制文件权限，不能加载不可信文件。依据：[LangGraph persistence](https://docs.langchain.com/oss/python/langgraph/persistence)。
+
 默认 demo 和单元测试不调用真实 LLM/数据库，使用 SQL 问答图练习 `StateGraph`、reducer、条件边、有限重试、checkpoint、stream、`interrupt` 和 `Command(resume=...)`。同时补上 SQL 策略、权限、错误分类、幂等和结果验证。真实模型只在显式运行 `tests_live/` 时参与 SQL 草稿生成。
 
 ## 架构与模块边界

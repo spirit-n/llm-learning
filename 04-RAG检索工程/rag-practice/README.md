@@ -1,5 +1,17 @@
 # 可评测、可观测的 RAG 检索练习
 
+## 2026-10：补充真实检索适配与证据支持性
+
+原来的确定性检索仍是默认基线。新增 `src/rag_lab/adapters.py` 的 `SentenceTransformerEmbedder.from_local(path)`、`CrossEncoderReranker.from_local(path)`，可注入 `RAGPipeline(..., embedder=..., reranker=...)`；只接受已有本地模型目录，使用 `local_files_only=True`。先在独立环境装 `.[dev,retrieval]`，自行选择并准备模型文件后再运行，不会触碰聊天模型的四项环境变量。
+
+`src/rag_lab/grounding.py` 的 `evaluate_grounding` 把“引用 ID 存在”与“每条事实有证据支持”分开。调用方提供完整事实清单及人工/校准后的 judge；漏列事实无法自动发现，judge 的判断也不等于真值。
+
+```powershell
+python -m pytest tests/test_real_adapters_and_grounding.py -q
+```
+
+阅读顺序：`adapters.py` → `indexes.py` 的注入点 → `pipeline.py` → `grounding.py` → 上述测试。当前测试注入假编码器/重排器验证接口、排序、向量合法性和证据覆盖，**不是**真实检索质量评测。真实模型实验应固定文档、查询集、过滤条件和标注，比较 Recall@k、排名、faithfulness、拒答与延迟，不仅看引用格式。
+
 这个项目把 RAG 拆成可独立替换和单测的工程模块。默认实现不需要 API Key、不会下载模型；`tests_live/` 才会使用统一环境变量调用真实模型。
 
 ```text

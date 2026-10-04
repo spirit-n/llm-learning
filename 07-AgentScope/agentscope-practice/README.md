@@ -1,5 +1,9 @@
 # AgentScope 多 Agent 协作与失败边界练习
 
+## 2026-10：版本与能力边界
+
+本工程继续锁定已验证的 `agentscope==2.0.4.post1`，不等于最新版本。官方入口已更新为 [docs.agentscope.io](https://docs.agentscope.io/)，核对时首页为 2.0.9；1.x 示例不可直接混用。2.x 能力图包括工具中间件、context 管理、隔离与服务化，但**本工程只验证下文列出的协作路径**，并未把全部能力接入。先运行现有离线测试，再另建隔离环境按 release notes 做迁移；不要对当前学习环境直接 `pip install -U agentscope`。
+
 这个项目使用 AgentScope 2.0.4 的真实 `Msg`、`Agent`、`ChatModelBase`、`FunctionTool` 和 `Toolkit` API。它不再只演示“按关键字二选一”，而是实现一条完整协作链：Coordinator 将请求交给领域专家，专家通过工具或知识生成草稿，再由无业务工具权限的 Review Agent 审核后交付。
 
 默认 demo 和单元测试使用 `OfflineChatModel`，因此不需要 API Key、不会产生费用；只有显式运行 `tests_live/` 才调用统一配置的真实模型。
