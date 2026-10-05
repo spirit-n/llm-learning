@@ -30,6 +30,8 @@ FORBIDDEN_NODE_NAMES = {
     "Drop",
     "Grant",
     "Insert",
+    "Into",
+    "Hint",
     "LoadData",
     "Lock",
     "Merge",
@@ -47,6 +49,11 @@ DANGEROUS_FUNCTIONS = {
     "read_csv_auto",
     "read_parquet",
     "sqlite_scan",
+    "sleep",
+    "benchmark",
+    "load_file",
+    "get_lock",
+    "release_lock",
 }
 SENSITIVE_KEY_PARTS = ("password", "secret", "token", "api_key", "authorization")
 
@@ -57,7 +64,7 @@ def validate_and_rewrite_readonly_sql(
     allowed_tables: set[str] | None = None,
 ) -> str:
     try:
-        statements = sqlglot.parse(sql, read="sqlite")
+        statements = sqlglot.parse(sql, read="mysql")
     except ParseError as exc:
         raise GuardDenied("SQL_PARSE_ERROR", "SQL 无法解析") from exc
 
@@ -76,10 +83,13 @@ def validate_and_rewrite_readonly_sql(
         raise GuardDenied("SQL_STAR_DENIED", "禁止 SELECT *，请明确列名")
 
     for function in statement.find_all(exp.Func):
-        if function.sql_name().lower() in DANGEROUS_FUNCTIONS:
+        name = function.name if isinstance(function, exp.Anonymous) else function.sql_name()
+        if name.lower() in DANGEROUS_FUNCTIONS:
             raise GuardDenied("SQL_FUNCTION_DENIED", "SQL 包含危险函数")
 
     cte_names = {cte.alias_or_name.lower() for cte in statement.find_all(exp.CTE)}
+    if any(table.db or table.catalog for table in statement.find_all(exp.Table)):
+        raise GuardDenied("SQL_TABLE_DENIED", "禁止跨数据库查询")
     table_names = {
         table.name.lower()
         for table in statement.find_all(exp.Table)
@@ -107,7 +117,7 @@ def validate_and_rewrite_readonly_sql(
             raise GuardDenied("SQL_LIMIT_INVALID", "LIMIT 必须是整数")
         effective_limit = min(max_rows, int(limit_expression.this))
 
-    return statement.limit(effective_limit, copy=True).sql(dialect="sqlite")
+    return statement.limit(effective_limit, copy=True).sql(dialect="mysql", comments=False)
 
 
 def redact_sensitive(value: Any) -> Any:

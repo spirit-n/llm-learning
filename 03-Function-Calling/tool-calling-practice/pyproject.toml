@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "A framework-free, guarded tool-calling loop for learning"
 requires-python = ">=3.12"
 dependencies = [
+    "learning-database>=0.1,<0.2",
     "pydantic>=2.12,<3",
     "sqlglot>=30.13,<31",
 ]

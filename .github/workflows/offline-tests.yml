@@ -50,7 +50,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install this project only
-        run: python -m pip install -e ".[${{ matrix.extras }}]"
+        run: |
+          python -m pip install -e ../../shared/database
+          python -m pip install -e ".[${{ matrix.extras }}]"
       - name: Run offline suite only
         run: python -m pytest tests -q
 
@@ -62,5 +64,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install "pytest>=8,<9" "httpx>=0.28,<1"
-      - run: python -m pytest shared/tests -q
+      - run: python -m pip install "pytest>=8,<9" "httpx>=0.28,<1" -e shared/database
+      - run: python -m pytest shared/tests shared/database/tests -q

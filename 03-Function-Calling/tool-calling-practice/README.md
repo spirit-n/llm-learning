@@ -1,5 +1,7 @@
 # 受控 Tool Calling 练习项目
 
+正常运行统一使用 `192.168.11.8:3306` 的持久化 MySQL；配置与安装说明见 [共享数据库文档](../../shared/database/README.md)。先执行 `python -m pip install -e ../../shared/database`，再安装本工程。离线测试显式使用临时 SQLite 或内存。
+
 这个项目不依赖 LangChain。目标是先看清楚模型与运行时的职责边界：
 
 ```text
@@ -34,7 +36,7 @@ python -m tool_loop.demo
 
 - `get_metric_definition(metric_name)`：读取固定指标口径。
 - `describe_table(table)`：返回裁剪后的表结构，不暴露敏感列。
-- `run_readonly_sql(sql, max_rows)`：使用 SQL AST 校验、表/列白名单、强制 `LIMIT` 和 SQLite `query_only` 双重保护。
+- `run_readonly_sql(sql, max_rows)`：使用 MySQL SQL AST 校验、表/列白名单、强制 `LIMIT`、只读事务和查询超时保护。
 
 ## 六层结构
 

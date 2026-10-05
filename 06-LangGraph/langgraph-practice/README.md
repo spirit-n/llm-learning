@@ -1,24 +1,20 @@
 # LangGraph 可恢复、可审计的 SQL 工作流练习
 
-## 2026-10：SQLite 跨进程恢复
+正常运行统一使用 `192.168.11.8:3306` 的持久化 MySQL；配置与安装说明见 [共享数据库文档](../../shared/database/README.md)。先执行 `python -m pip install -e ../../shared/database`，再安装本工程。离线测试显式使用临时 SQLite 或内存。
 
-在本工程的独立环境装可选依赖，然后用同一个 thread ID 执行两次命令（两个独立进程）：
+## MySQL 跨进程恢复
 
 ```powershell
+python -m pip install -e ../../shared/database
 python -m pip install -e ".[dev,persistence]"
-New-Item -ItemType Directory -Force artifacts | Out-Null
-python -m lg_lab.persistent_demo pause --checkpoint artifacts/checkpoints.sqlite --ledger artifacts/ledger.sqlite --thread lesson-1
-python -m lg_lab.persistent_demo approve --checkpoint artifacts/checkpoints.sqlite --ledger artifacts/ledger.sqlite --thread lesson-1
+python -m lg_lab.persistent_demo pause --thread lesson-1
+python -m lg_lab.persistent_demo approve --thread lesson-1
 python -m pytest tests/test_persistence.py -q
 ```
 
-先看到 `paused=true, execution_count=0`，恢复后 `completed, execution_count=1`。需要重做时换 thread ID；已完成的线程不能再次审批。`persistence.py` 将图状态放进 `SqliteSaver`，另用 SQLite 结果台账保护执行；测试覆盖“结果已提交、图 checkpoint 尚未提交时崩溃”，重启读取旧结果而不重复产生结果。
+同一个 thread ID 在两个独立进程间恢复。`persistent_demo` 默认读取 `DATABASE_URL`；checkpoint 和结果台账写入 MySQL。第一次 `paused=true`，审批后 `status=completed`，台账累计增加一条；重做请换 thread ID。测试覆盖结果已提交、checkpoint 尚未提交时崩溃后的回放。显式传入 SQLite 文件路径仅用于离线测试。
 
-阅读顺序：`persistent_demo.py` → `persistence.py` → `graph.py` → `test_persistence.py`。缺可选包时只有 SQLite saver 的测试跳过，结果台账仍可测试。本轮在临时独立环境使用 `langgraph-checkpoint-sqlite 3.1.1` 通过全部 4 项；没有升级原环境。
-
-边界：这是本地教学结果事务，不是任意 HTTP/退款/邮件的 exactly-once 保证；外部副作用仍需下游幂等键、查询对账或 outbox。checkpoint 文件也必须限制文件权限，不能加载不可信文件。依据：[LangGraph persistence](https://docs.langchain.com/oss/python/langgraph/persistence)。
-
-默认 demo 和单元测试不调用真实 LLM/数据库，使用 SQL 问答图练习 `StateGraph`、reducer、条件边、有限重试、checkpoint、stream、`interrupt` 和 `Command(resume=...)`。同时补上 SQL 策略、权限、错误分类、幂等和结果验证。真实模型只在显式运行 `tests_live/` 时参与 SQL 草稿生成。
+普通内存 demo 继续用于图结构讲解；持久化示例不调用真实模型，但会连接配置的 MySQL。外部 HTTP/退款/邮件副作用仍需下游幂等或 outbox。不要读取不可信来源的 checkpoint。
 
 ## 架构与模块边界
 
@@ -83,7 +79,7 @@ python -m pytest -q
 
 1. 运行 `failures_remaining=1/3/5`，比较最终状态、attempts、错误历史和 Trace。
 2. 在 `inspect_sql` 测试中加入 JOIN、子查询、alias wildcard 和注释绕过样本，观察 AST 节点而不是正则文本。
-3. 把 `DemoWarehouse` 换成只读 SQLite adapter，保持 `Warehouse.query`、幂等键和测试夹具不变。
+3. 阅读 `PersistentWarehouse` 的 MySQL 执行、行锁和持久化台账，保持 `Warehouse.query`、幂等键和测试夹具不变。
 4. 将 `InMemorySaver` 换持久化 checkpointer，结束进程后用同一 thread ID 恢复。
 5. live 生成节点故意请求危险 SQL，确认无论模型如何回答都必须经过同一个确定性 Guard。
 

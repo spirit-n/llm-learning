@@ -7,7 +7,7 @@ name = "offline-deployment-practice"
 version = "0.1.0"
 description = "Offline FastAPI deployment and readiness learning lab"
 requires-python = ">=3.12"
-dependencies = ["fastapi==0.142.2", "uvicorn==0.52.0"]
+dependencies = ["learning-database>=0.1,<0.2", "fastapi==0.142.2", "uvicorn==0.52.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<9", "httpx>=0.28,<1"]

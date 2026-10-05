@@ -1,36 +1,27 @@
-"""SQLite teaching stores. No automatic reclaim of ambiguous side effects."""
+"""Transactional MySQL stores; explicit SQLite paths support offline tests."""
 from __future__ import annotations
 
 import json
-import sqlite3
-from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
+from uuid import uuid4
+
+from learning_db import Database
+from sqlalchemy import text
 
 from .idempotency import IdempotencyState
 
 
-class SQLiteIdempotencyStore:
-    def __init__(self, path: str | Path):
-        self.path = str(path)
-        with self.connection() as db:
-            db.execute("""CREATE TABLE IF NOT EXISTS idempotency (
-                key TEXT PRIMARY KEY, signature TEXT NOT NULL,
-                state TEXT NOT NULL CHECK(state IN ('in_progress','completed','unknown')),
-                data TEXT)""")
-
-    @contextmanager
-    def connection(self) -> Iterator[sqlite3.Connection]:
-        db = sqlite3.connect(self.path, timeout=5)
-        try:
-            with db:
-                yield db
-        finally:
-            db.close()
+class IdempotencyStore:
+    def __init__(self, url: str | Path | None = None):
+        self.db = Database(url)
+        self.db.create_tables(["""CREATE TABLE IF NOT EXISTS idempotency (
+            idem_key VARCHAR(191) PRIMARY KEY, signature VARCHAR(191) NOT NULL,
+            state VARCHAR(20) NOT NULL, data LONGTEXT, reservation VARCHAR(32) NOT NULL)"""])
 
     def lookup(self, key: str, signature: str) -> tuple[IdempotencyState, Any | None]:
-        with self.connection() as db:
-            row = db.execute("SELECT signature,state,data FROM idempotency WHERE key=?", (key,)).fetchone()
+        with self.db.connection() as db:
+            row = db.execute(text("SELECT signature,state,data FROM idempotency WHERE idem_key=:key"), {"key": key}).fetchone()
         if row is None:
             return "missing", None
         if row[0] != signature:
@@ -38,48 +29,48 @@ class SQLiteIdempotencyStore:
         return row[1], json.loads(row[2]) if row[2] is not None else None
 
     def reserve(self, key: str, signature: str) -> tuple[IdempotencyState, Any | None]:
-        with self.connection() as db:
-            cursor = db.execute(
-                "INSERT OR IGNORE INTO idempotency(key,signature,state) VALUES (?,?,'in_progress')",
-                (key, signature),
-            )
-            reserved = cursor.rowcount == 1
-        return ("reserved", None) if reserved else self.lookup(key, signature)
+        reservation = uuid4().hex
+        with self.db.transaction() as db:
+            self.db.insert_once(db, "idempotency", "idem_key,signature,state,reservation",
+                                ":key,:signature,'in_progress',:reservation",
+                                {"key": key, "signature": signature, "reservation": reservation})
+            row = db.execute(text("SELECT signature,state,data,reservation FROM idempotency WHERE idem_key=:key" + self.db.for_update), {"key": key}).one()
+            if row[3] == reservation:
+                return "reserved", None
+            if row[0] != signature:
+                return "conflict", None
+            return row[1], json.loads(row[2]) if row[2] is not None else None
 
     def complete(self, key: str, signature: str, data: Any) -> None:
         payload = json.dumps(data, ensure_ascii=False, allow_nan=False)
-        with self.connection() as db:
-            cursor = db.execute(
-                "UPDATE idempotency SET state='completed',data=? WHERE key=? AND signature=?",
-                (payload, key, signature),
-            )
-            if cursor.rowcount != 1:
+        with self.db.transaction() as db:
+            result = db.execute(text("UPDATE idempotency SET state='completed',data=:data WHERE idem_key=:key AND signature=:sig"),
+                                {"data": payload, "key": key, "sig": signature})
+            if result.rowcount != 1:
                 raise RuntimeError("幂等记录不存在或签名不一致")
 
     def mark_unknown(self, key: str, signature: str) -> None:
-        with self.connection() as db:
-            db.execute("UPDATE idempotency SET state='unknown' WHERE key=? AND signature=? AND state!='completed'",
-                       (key, signature))
+        with self.db.transaction() as db:
+            db.execute(text("UPDATE idempotency SET state='unknown' WHERE idem_key=:key AND signature=:sig AND state!='completed'"), {"key": key, "sig": signature})
 
 
-class SQLiteReportWorkflow:
-    """Two durable steps; report insertion and checkpoint share one local DB transaction.
-
-    This is NOT an exactly-once promise for external HTTP/payment/email effects.
-    """
-    def __init__(self, path: str | Path):
-        self.store = SQLiteIdempotencyStore(path)
-        with self.store.connection() as db:
-            db.execute("CREATE TABLE IF NOT EXISTS jobs (id TEXT PRIMARY KEY, tenant TEXT NOT NULL, phase TEXT NOT NULL, cost_units INTEGER NOT NULL)")
-            db.execute("CREATE TABLE IF NOT EXISTS reports (job_id TEXT PRIMARY KEY, tenant TEXT NOT NULL, body TEXT NOT NULL)")
+class ReportWorkflow:
+    """Report insertion and checkpoint commit together; external effects need their own protocol."""
+    def __init__(self, url: str | Path | None = None):
+        self.store = IdempotencyStore(url)
+        self.store.db.create_tables([
+            "CREATE TABLE IF NOT EXISTS jobs (id VARCHAR(191) PRIMARY KEY, tenant VARCHAR(191) NOT NULL, phase VARCHAR(32) NOT NULL, cost_units INTEGER NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS reports (job_id VARCHAR(191) PRIMARY KEY, tenant VARCHAR(191) NOT NULL, body TEXT NOT NULL)",
+        ])
 
     def advance(self, job_id: str, tenant: str, *, max_cost_units: int = 2) -> dict[str, Any]:
         if not job_id or not tenant or max_cost_units < 1:
             raise ValueError("job_id/tenant/预算必须有效")
-        with self.store.connection() as db:
-            db.execute("BEGIN IMMEDIATE")
-            db.execute("INSERT OR IGNORE INTO jobs VALUES (?,?,'pending',0)", (job_id, tenant))
-            owner, phase, cost = db.execute("SELECT tenant,phase,cost_units FROM jobs WHERE id=?", (job_id,)).fetchone()
+        database = self.store.db
+        with database.transaction() as db:
+            params = {"job": job_id, "tenant": tenant}
+            database.insert_once(db, "jobs", "id,tenant,phase,cost_units", ":job,:tenant,'pending',0", params)
+            owner, phase, cost = db.execute(text("SELECT tenant,phase,cost_units FROM jobs WHERE id=:job" + database.for_update), params).one()
             if owner != tenant:
                 raise PermissionError("任务不属于当前租户")
             if phase == "completed":
@@ -87,21 +78,25 @@ class SQLiteReportWorkflow:
             if cost + 1 > max_cost_units:
                 raise ValueError("教学预算耗尽，重启不会清零")
             if phase == "pending":
-                db.execute("INSERT INTO reports VALUES (?,?,?)", (job_id, tenant, "离线报告：营业收入口径"))
+                db.execute(text("INSERT INTO reports VALUES (:job,:tenant,:body)"), {**params, "body": "离线报告：营业收入口径"})
                 phase = "report_created"
             else:
                 phase = "completed"
-            db.execute("UPDATE jobs SET phase=?,cost_units=? WHERE id=?", (phase, cost + 1, job_id))
+            db.execute(text("UPDATE jobs SET phase=:phase,cost_units=:cost WHERE id=:job"), {**params, "phase": phase, "cost": cost + 1})
             return {"phase": phase, "cost_units": cost + 1, "replayed": False}
+
+
+SQLiteIdempotencyStore = IdempotencyStore
+SQLiteReportWorkflow = ReportWorkflow
 
 
 def main() -> None:
     import argparse
-    parser = argparse.ArgumentParser(description="每次运行推进一个持久化步骤；重复运行不会重复写报告")
-    parser.add_argument("--db", required=True)
+    parser = argparse.ArgumentParser(description="每次运行推进一个 MySQL 持久化步骤")
+    parser.add_argument("--db", help="数据库 URL；默认读取 DATABASE_URL")
     parser.add_argument("--job", default="demo")
     args = parser.parse_args()
-    print(json.dumps(SQLiteReportWorkflow(args.db).advance(args.job, "tenant-a"), ensure_ascii=False))
+    print(json.dumps(ReportWorkflow(args.db).advance(args.job, "tenant-a"), ensure_ascii=False))
 
 
 if __name__ == "__main__":

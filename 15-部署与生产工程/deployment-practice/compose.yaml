@@ -1,10 +1,12 @@
 services:
   app:
-    build: .
+    build:
+      context: ../..
+      dockerfile: 15-部署与生产工程/deployment-practice/Dockerfile
     ports:
       - "127.0.0.1:8000:8000"
-    volumes:
-      - learning-state:/app/data
+    env_file:
+      - ../../.env
     read_only: true
     tmpfs:
       - /tmp
@@ -12,5 +14,3 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
-volumes:
-  learning-state:

@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: container-registry.oracle.com/mysql/community-server@sha256:7dcc4add9183664de3a214daf85a50c3ba6cccfd7534f700b6561bf5b41885be
+    container_name: mysql84
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    env_file:
+      - /home/mysql84/mysql.env
+    volumes:
+      - /home/mysql84/data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_bin
+      - --innodb-buffer-pool-size=256M
+      - --innodb-flush-log-at-trx-commit=1
+      - --sync-binlog=1

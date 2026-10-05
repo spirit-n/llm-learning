@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import sqlite3
-from contextlib import closing
+from learning_db import Database, DatabaseError
+from sqlalchemy import text
 from pathlib import Path
 from uuid import uuid4
 
@@ -14,33 +14,33 @@ class Question(BaseModel):
     question: str = Field(min_length=1, max_length=500)
 
 
-class LocalStore:
-    def __init__(self, path: Path):
-        self.path = path
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with closing(sqlite3.connect(path)) as db, db:
-            db.execute("CREATE TABLE IF NOT EXISTS requests (trace_id TEXT PRIMARY KEY)")
-
-    def connect(self):
-        # mode=rw prevents a removed database silently being recreated as 'healthy'.
-        return sqlite3.connect(self.path.resolve().as_uri() + "?mode=rw", uri=True, timeout=1)
+class PersistentStore:
+    def __init__(self, url: str | Path | None = None):
+        self.db = Database(url)
+        self.path = Path(url) if url is not None and '://' not in str(url) else None
+        self.db.create_tables(["CREATE TABLE IF NOT EXISTS requests (trace_id VARCHAR(32) PRIMARY KEY)"])
 
     def ready(self) -> bool:
+        if self.path is not None and not self.path.exists():
+            return False
         try:
-            with closing(self.connect()) as db:
-                db.execute("SELECT trace_id FROM requests LIMIT 1").fetchall()
+            with self.db.connection() as db:
+                db.execute(text('SELECT trace_id FROM requests LIMIT 1')).fetchall()
             return True
-        except sqlite3.Error:
+        except DatabaseError:
             return False
 
     def record(self, trace_id: str) -> None:
-        with closing(self.connect()) as db, db:
-            db.execute("INSERT INTO requests VALUES (?)", (trace_id,))
+        with self.db.transaction() as db:
+            db.execute(text('INSERT INTO requests VALUES (:trace)'), {'trace': trace_id})
 
 
-def create_app(store: LocalStore | None = None) -> FastAPI:
+LocalStore = PersistentStore
+
+
+def create_app(store: PersistentStore | None = None) -> FastAPI:
     app = FastAPI(title="Offline deployment lab")
-    app.state.store = store if store is not None else LocalStore(Path("data/state.sqlite"))
+    app.state.store = store if store is not None else PersistentStore()
 
     @app.middleware("http")
     async def correlation(request: Request, call_next):
@@ -66,7 +66,7 @@ def create_app(store: LocalStore | None = None) -> FastAPI:
             raise HTTPException(status_code=503, detail="storage_not_ready")
         try:
             app.state.store.record(request.state.trace_id)
-        except sqlite3.Error:
+        except DatabaseError:
             raise HTTPException(status_code=503, detail="storage_unavailable") from None
         # Deliberately fixed answer: this validates serving, not intelligence.
         return {"answer": "离线演示：模型提出调用意图，应用程序校验并执行工具。",

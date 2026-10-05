@@ -18,6 +18,7 @@ class SQLPolicyResult(BaseModel):
     limit: int | None = None
     fingerprint: str = ""
     risk_level: str = "high"
+    normalized_sql: str = ""
 
 
 def inspect_sql(
@@ -33,7 +34,7 @@ def inspect_sql(
     if len(normalized) > 2_000:
         return SQLPolicyResult(allowed=False, reason="SQL 过长", fingerprint=fingerprint)
     try:
-        statements = parse(normalized, read="sqlite")
+        statements = parse(normalized, read="mysql")
     except ParseError:
         return SQLPolicyResult(allowed=False, reason="SQL 语法无法解析", fingerprint=fingerprint)
     if len(statements) != 1:
@@ -41,6 +42,15 @@ def inspect_sql(
     statement = statements[0]
     if not isinstance(statement, exp.Select):
         return SQLPolicyResult(allowed=False, reason="只允许 SELECT", fingerprint=fingerprint)
+
+    if statement.find(exp.Into) or statement.find(exp.Lock):
+        return SQLPolicyResult(allowed=False, reason="禁止写文件或锁定查询", fingerprint=fingerprint)
+    if statement.find(exp.Hint):
+        return SQLPolicyResult(allowed=False, reason="禁止覆盖执行策略的 SQL hint", fingerprint=fingerprint)
+    for function in statement.find_all(exp.Func):
+        name = function.name if isinstance(function, exp.Anonymous) else function.sql_name()
+        if name.lower() in {"sleep", "benchmark", "load_file", "get_lock", "release_lock"}:
+            return SQLPolicyResult(allowed=False, reason="禁止危险函数", fingerprint=fingerprint)
 
     # AST 能同时识别 SELECT *、alias.*、COUNT(*)，不会被换行/注释/大小写绕过。
     if any(True for _ in statement.find_all(exp.Star)):
@@ -90,4 +100,5 @@ def inspect_sql(
         limit=limit,
         fingerprint=fingerprint,
         risk_level=risk,
+        normalized_sql=statement.sql(dialect="mysql", comments=False),
     )

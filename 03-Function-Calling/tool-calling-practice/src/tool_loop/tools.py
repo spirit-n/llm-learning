@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import sqlite3
-import threading
+from pathlib import Path
+from learning_db import Database
+from sqlalchemy import text
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -62,43 +63,38 @@ PUBLIC_TABLE_SCHEMAS = {
 
 
 class AnalyticsStore:
-    def __init__(self) -> None:
-        self._lock = threading.Lock()
-        self._connection = sqlite3.connect(":memory:", check_same_thread=False)
-        self._connection.row_factory = sqlite3.Row
+    def __init__(self, url: str | Path | None = None) -> None:
+        self.db = Database(url)
+        self.db.create_tables([
+            "CREATE TABLE IF NOT EXISTS sales (order_id VARCHAR(191) PRIMARY KEY, channel VARCHAR(64) NOT NULL, amount DOUBLE NOT NULL, order_date VARCHAR(10) NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS customers (customer_id VARCHAR(191) PRIMARY KEY, segment VARCHAR(64) NOT NULL, email VARCHAR(191) NOT NULL, created_at VARCHAR(10) NOT NULL)",
+        ])
         self._seed()
-        self._connection.execute("PRAGMA query_only = ON")
 
     def _seed(self) -> None:
-        self._connection.executescript(
-            """
-            CREATE TABLE sales (
-                order_id TEXT PRIMARY KEY,
-                channel TEXT NOT NULL,
-                amount REAL NOT NULL,
-                order_date TEXT NOT NULL
-            );
-            CREATE TABLE customers (
-                customer_id TEXT PRIMARY KEY,
-                segment TEXT NOT NULL,
-                email TEXT NOT NULL,
-                created_at TEXT NOT NULL
-            );
-            INSERT INTO sales VALUES
-                ('A100', 'wechat', 120.5, '2026-07-01'),
-                ('A101', 'douyin', 80.0, '2026-07-02'),
-                ('A102', 'website', 260.0, '2026-07-03');
-            INSERT INTO customers VALUES
-                ('C01', 'new', 'alice@example.com', '2026-06-01'),
-                ('C02', 'vip', 'bob@example.com', '2025-12-15');
-            """
-        )
-        self._connection.commit()
+        with self.db.transaction() as db:
+            for order, channel, amount, day in [('A100', 'wechat', 120.5, '2026-07-01'), ('A101', 'douyin', 80.0, '2026-07-02'), ('A102', 'website', 260.0, '2026-07-03')]:
+                self.db.insert_once(db, 'sales', 'order_id,channel,amount,order_date', ':id,:channel,:amount,:day',
+                                    {'id': order, 'channel': channel, 'amount': amount, 'day': day})
+            for customer, segment, email, day in [('C01', 'new', 'alice@example.com', '2026-06-01'), ('C02', 'vip', 'bob@example.com', '2025-12-15')]:
+                self.db.insert_once(db, 'customers', 'customer_id,segment,email,created_at', ':id,:segment,:email,:day',
+                                    {'id': customer, 'segment': segment, 'email': email, 'day': day})
 
     def query(self, sql: str) -> list[dict[str, object]]:
-        with self._lock:
-            cursor = self._connection.execute(sql)
-            return [dict(row) for row in cursor.fetchall()]
+        sql = validate_and_rewrite_readonly_sql(sql, 1000)
+        with self.db.connection() as db:
+            if self.db.mysql:
+                db.execute(text('SET SESSION MAX_EXECUTION_TIME=2000'))
+                db.commit()
+                db.execute(text('START TRANSACTION READ ONLY'))
+            else:
+                db.execute(text('PRAGMA query_only=ON'))
+            try:
+                return [dict(row) for row in db.exec_driver_sql(sql, execution_options={"no_parameters": True}).mappings()]
+            finally:
+                db.rollback()
+                if not self.db.mysql:
+                    db.execute(text('PRAGMA query_only=OFF'))
 
 
 def get_metric_definition(args: MetricArgs) -> dict[str, object]:

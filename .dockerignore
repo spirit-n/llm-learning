@@ -1,0 +1,12 @@
+.git
+.venv
+**/.venv
+**/__pycache__
+**/.pytest_cache
+.env
+**/.env
+.env.*
+**/.env.*
+study_config.json
+work
+anaconda_projects
